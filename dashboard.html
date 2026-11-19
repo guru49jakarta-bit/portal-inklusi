@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Portal InklusiBerbagi</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .bg-brand-blue { background-color: #1E3A8A; }
         .text-brand-blue { color: #1E3A8A; }
         .bg-brand-yellow { background-color: #F59E0B; }
-        /* Sembunyikan halaman dulu sampai auth selesai dicek */
         #mainApp { display: none; }
     </style>
 </head>
@@ -64,16 +61,11 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="relative p-2 text-gray-500 hover:text-brand-blue">
-                        🔔
-                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
                     <div class="flex items-center gap-3 border-l pl-4 border-gray-200">
                         <div class="w-10 h-10 bg-brand-yellow rounded-full flex items-center justify-center text-white font-bold" id="userInitial">
                             G
                         </div>
                         <div>
-                            <!-- Nama user akan diisi otomatis oleh JS -->
                             <p class="text-sm font-bold text-gray-800" id="userName">Memuat...</p>
                             <p class="text-xs text-gray-500">Guru</p>
                         </div>
@@ -98,29 +90,29 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <p class="text-gray-500 text-sm font-medium mb-1">Total Modul</p>
-                        <p class="text-3xl font-bold text-gray-800">1,240</p>
+                        <p class="text-3xl font-bold text-gray-800">0</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <p class="text-gray-500 text-sm font-medium mb-1">Guru Kontributor</p>
-                        <p class="text-3xl font-bold text-gray-800">350</p>
+                        <p class="text-3xl font-bold text-gray-800">0</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <p class="text-gray-500 text-sm font-medium mb-1">Profil PDBK Terdata</p>
-                        <p class="text-3xl font-bold text-gray-800">85</p>
+                        <p class="text-3xl font-bold text-gray-800">0</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <p class="text-gray-500 text-sm font-medium mb-1">Diskusi Aktif</p>
-                        <p class="text-3xl font-bold text-gray-800">42</p>
+                        <p class="text-3xl font-bold text-gray-800">0</p>
                     </div>
                 </div>
 
-                <!-- Modul Terbaru (Section) -->
+                <!-- Modul Terbaru -->
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold text-gray-800">Modul Terbaru Lintas Mapel</h3>
                     <a href="#" class="text-brand-blue font-semibold hover:underline text-sm">Lihat Semua</a>
                 </div>
 
-                <!-- Container Kosong untuk menampung modul dari Database -->
+                <!-- Container Modul -->
                 <div id="modulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Konten akan diisi oleh JavaScript -->
                 </div>
@@ -130,63 +122,64 @@
 
     <!-- Script Supabase untuk Dashboard -->
     <script>
-        // GANTI DENGAN KREDENSIAL SUPABASE ANDA
+        // 1. GANTI KREDENSIAL DI SINI
         const SUPABASE_URL = 'https://zbmeiymlfbviutgcxxcy.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_FufWDVwBpxEGC24_KOlXMw_r_rKvbOP';
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // 2. GUNAKAN NAMA VARIABEL BARU (supabaseClient)
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 1. CEK SESI LOGIN & TAMPILKAN DATA USER
+        // 3. FUNGSI CEK SESI LOGIN
         async function checkAuth() {
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
 
             if (error || !session) {
-                // Jika tidak ada sesi login, tendang ke halaman login
-                window.location.href = 'login.html';
+                // Jika tidak ada sesi, tendang ke halaman login (index.html atau /)
+                window.location.href = '/';
                 return;
             }
 
-            // Jika ada sesi, tampilkan aplikasi
+            // Tampilkan aplikasi jika sesi valid
             document.getElementById('mainApp').style.display = 'flex';
 
             // Tampilkan nama user berdasarkan email
             const email = session.user.email;
-            const name = email.split('@')[0]; // Ambil teks sebelum @
+            const name = email.split('@')[0];
             
             document.getElementById('userName').innerText = name;
             document.getElementById('userInitial').innerText = name.charAt(0).toUpperCase();
         }
 
-        // 2. FUNGSI LOGOUT
+        // 4. FUNGSI LOGOUT
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             const confirmLogout = confirm('Apakah Anda yakin ingin keluar?');
             if (confirmLogout) {
-                await supabase.auth.signOut();
-                window.location.href = 'login.html';
+                await supabaseClient.auth.signOut();
+                window.location.href = '/'; // Kembali ke halaman login
             }
         });
 
-        // 3. FUNGSI MENGAMBIL MODUL DARI DATABASE
+        // 5. FUNGSI MENGAMBIL MODUL
         async function fetchModules() {
             const grid = document.getElementById('modulesGrid');
 
-            const { data: modules, error } = await supabase
+            const { data: modules, error } = await supabaseClient
                 .from('modules')
                 .select('*')
                 .order('created_at', { ascending: false });
 
             if (error) {
                 console.error('Error:', error);
-                grid.innerHTML = `<p class="text-red-500">Gagal memuat modul: ${error.message}</p>`;
+                grid.innerHTML = `<p class="text-red-500 col-span-3">Gagal memuat modul: ${error.message}</p>`;
                 return;
             }
 
             if (modules.length === 0) {
-                grid.innerHTML = `<p class="text-gray-500 col-span-3 text-center py-8">Belum ada modul yang diunggah. Jadilah yang pertama untuk berbagi!</p>`;
+                grid.innerHTML = `<p class="text-gray-500 col-span-3 text-center py-8 bg-white rounded-xl shadow-sm border border-gray-100">Belum ada modul yang diunggah. Jadilah yang pertama untuk berbagi!</p>`;
                 return;
             }
 
-            // Loop data dari database dan ubah menjadi kartu HTML
+            // Render kartu modul
             grid.innerHTML = modules.map(modul => `
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
                     <div class="p-6">
@@ -200,8 +193,8 @@
                     </div>
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
                         <div class="flex gap-4 text-gray-500 text-sm">
-                            <span title="Diunduh">⬇️ ${modul.download_count}</span>
-                            <span title="Dimodifikasi">🔄 ${modul.adaptation_count}</span>
+                            <span title="Diunduh">⬇️ ${modul.download_count || 0}</span>
+                            <span title="Dimodifikasi">🔄 ${modul.adaptation_count || 0}</span>
                         </div>
                         <button onclick="alert('Fitur adaptasi modul akan segera hadir!')" class="bg-brand-blue hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg text-sm transition">
                             Adaptasi Modul
@@ -211,12 +204,12 @@
             `).join('');
         }
 
-        // Jalankan fungsi saat halaman dimuat
-        checkAuth();
-        // Panggil fetchModules setelah auth dicek
-        checkAuth().then(() => {
-            fetchModules();
-        });
+        // 6. JALANKAN FUNGSI SECARA BERURUTAN (Hanya sekali panggil)
+        async function init() {
+            await checkAuth();
+            await fetchModules();
+        }
+        init();
 
     </script>
 </body>
