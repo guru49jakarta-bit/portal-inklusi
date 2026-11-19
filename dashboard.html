@@ -47,7 +47,6 @@
         .premium-card { transition: all 0.3s ease; }
         .premium-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
         
-        /* Sembunyikan input file bawaan */
         input[type="file"]::file-selector-button { display: none; }
     </style>
 </head>
@@ -346,6 +345,39 @@
         </div>
     </div>
 
+    <!-- MODAL DETAIL MODUL (BARU) -->
+    <div id="detailModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all max-h-[90vh] flex flex-col">
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0">
+                <h3 id="detailTitle" class="text-xl font-bold text-slate-800 leading-tight">Judul Modul</h3>
+                <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div class="flex flex-wrap gap-2 mb-4" id="detailTags"></div>
+                <p class="text-sm text-slate-500 mb-6 italic" id="detailAuthor"></p>
+                
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <p class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-wider mb-2">Deskripsi / Cara Adaptasi</p>
+                    <p class="text-slate-700 whitespace-pre-wrap text-sm leading-relaxed" id="detailDesc"></p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex flex-col md:flex-row justify-between items-center gap-3 shrink-0">
+                <button onclick="closeModal('detailModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-white transition-colors w-full md:w-auto">Tutup</button>
+                
+                <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                    <!-- Tombol Download (Akan disembunyikan jika tidak ada file/link) -->
+                    <a id="btnDownload" href="#" target="_blank" download class="hidden bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+                        ⬇️ Download File
+                    </a>
+                    <!-- Tombol Adaptasi -->
+                    <button id="btnAdapt" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-2.5 px-5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        ✏️ Edit / Adaptasi Modul
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL MURID -->
     <div id="studentModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden transform transition-all">
@@ -458,7 +490,6 @@
             }
         });
 
-        // --- FITUR LAMPIRAN (FILE / LINK) ---
         function toggleLampiran(type) {
             if (type === 'file') {
                 document.getElementById('inputFileContainer').classList.remove('hidden');
@@ -512,16 +543,10 @@
                                 <span class="flex items-center gap-1" title="Diunduh">⬇️ ${modul.download_count || 0}</span>
                                 <span class="flex items-center gap-1" title="Dimodifikasi">🔄 ${modul.adaptation_count || 0}</span>
                             </div>
-                            <div class="flex gap-2">
-                                ${modul.file_url ? `
-                                    <a href="${modul.file_url}" target="_blank" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white font-bold py-1.5 px-3 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1">
-                                        🔗 Buka Modul
-                                    </a>
-                                ` : ''}
-                                <button onclick="openModal('adapt', ${modul.id})" class="bg-white border border-slate-200 text-slate-700 hover:bg-brand-dark hover:text-white hover:border-brand-dark font-bold py-1.5 px-4 rounded-lg text-xs transition-all shadow-sm">
-                                    Adaptasi
-                                </button>
-                            </div>
+                            <!-- Tombol Buka diubah dari tombol Adaptasi -->
+                            <button onclick="openDetailModal(${modul.id})" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-1.5 px-6 rounded-lg text-xs transition-all shadow-sm">
+                                Buka
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -535,11 +560,46 @@
             renderModules(filtered, 'allModulesGrid');
         }
 
+        // --- FITUR DETAIL & ADAPTASI MODUL ---
+        function openDetailModal(id) {
+            const modul = allModulesData.find(m => m.id === id);
+            if (!modul) return;
+
+            closeAllModals();
+            document.getElementById('detailModal').style.display = 'flex';
+
+            // Isi Konten Modal
+            document.getElementById('detailTitle').innerText = modul.title;
+            document.getElementById('detailAuthor').innerHTML = `Dibuat oleh: <strong class="text-brand-blue">${modul.author_name}</strong>`;
+            document.getElementById('detailDesc').innerText = modul.description || 'Tidak ada deskripsi.';
+            
+            document.getElementById('detailTags').innerHTML = `
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">${modul.subject}</span>
+                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">${modul.disability_type}</span>
+            `;
+
+            // Handle Tombol Download
+            const btnDownload = document.getElementById('btnDownload');
+            if (modul.file_url) {
+                btnDownload.href = modul.file_url;
+                btnDownload.classList.remove('hidden');
+            } else {
+                btnDownload.classList.add('hidden');
+            }
+
+            // Handle Tombol Adaptasi/Edit
+            const btnAdapt = document.getElementById('btnAdapt');
+            btnAdapt.onclick = () => {
+                closeModal('detailModal'); // Tutup detail dulu
+                openModal('adapt', modul.id); // Buka form adaptasi
+            };
+        }
+
         function openModal(mode, id = null) {
             closeAllModals(); 
             document.getElementById('moduleModal').style.display = 'flex';
             document.getElementById('moduleForm').reset(); 
-            toggleLampiran('file'); // Default ke upload file
+            toggleLampiran('file'); 
             
             if (mode === 'upload') {
                 document.getElementById('modalTitle').innerText = 'Unggah Modul Baru';
@@ -558,7 +618,6 @@
             }
         }
 
-        // PROSES SIMPAN MODUL (DENGAN UPLOAD FILE ATAU LINK)
         document.getElementById('moduleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveBtn');
@@ -569,7 +628,6 @@
             const originalId = document.getElementById('originalId').value;
             let fileUrl = null;
 
-            // Cek apakah user memilih upload file atau link
             const lampiranType = document.querySelector('input[name="lampiranType"]:checked').value;
 
             try {
@@ -577,17 +635,14 @@
                     const fileInput = document.getElementById('moduleFile');
                     if (fileInput.files.length > 0) {
                         const file = fileInput.files[0];
-                        // Buat nama file unik (timestamp + nama asli)
                         const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
                         
-                        // Upload ke Supabase Storage bucket 'modul-files'
                         const { data: uploadData, error: uploadError } = await supabaseClient.storage
                             .from('modul-files')
                             .upload(fileName, file);
 
                         if (uploadError) throw new Error('Gagal upload file: ' + uploadError.message);
 
-                        // Ambil URL publik dari file yang diupload
                         const { data: urlData } = supabaseClient.storage
                             .from('modul-files')
                             .getPublicUrl(fileName);
@@ -595,7 +650,6 @@
                         fileUrl = urlData.publicUrl;
                     }
                 } else {
-                    // Jika memilih link
                     const linkInput = document.getElementById('moduleLink').value;
                     if (linkInput) fileUrl = linkInput;
                 }
@@ -605,7 +659,7 @@
                     subject: document.getElementById('subject').value,
                     disability_type: document.getElementById('disability').value,
                     description: document.getElementById('description').value,
-                    file_url: fileUrl, // Simpan URL file/link ke database
+                    file_url: fileUrl,
                     author_name: currentUser.email.split('@')[0],
                     author_id: currentUser.id
                 };
@@ -614,12 +668,10 @@
                     newData.description = `[Diadaptasi dari modul ${document.getElementById('originalAuthor').value}]\n\n` + newData.description;
                 }
 
-                // Insert ke tabel database
                 const { error } = await supabaseClient.from('modules').insert([newData]);
 
                 if (error) throw new Error('Gagal menyimpan data: ' + error.message);
 
-                // Jika ini adalah proses adaptasi, update counter di modul asli
                 if (originalId) {
                     const original = allModulesData.find(m => m.id == originalId);
                     await supabaseClient.from('modules').update({ adaptation_count: (original.adaptation_count || 0) + 1 }).eq('id', originalId);
