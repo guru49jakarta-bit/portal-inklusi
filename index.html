@@ -43,7 +43,6 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">Selamat Datang Kembali</h2>
                 <p class="text-gray-500 mb-8">Silakan masuk menggunakan akun guru Anda.</p>
 
-                <!-- Form Login dengan ID untuk JS -->
                 <form id="loginForm">
                     <div class="mb-5">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Guru</label>
@@ -59,43 +58,30 @@
                             placeholder="••••••••">
                     </div>
 
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center">
-                            <input type="checkbox" id="remember" class="w-4 h-4 text-brand-blue border-gray-300 rounded focus:ring-brand-blue">
-                            <label for="remember" class="ml-2 text-sm text-gray-600">Ingat saya</label>
-                        </div>
-                        <a href="#" class="text-sm text-brand-blue hover:underline font-medium">Lupa Password?</a>
-                    </div>
-
                     <button type="submit" id="submitBtn"
                         class="w-full bg-brand-blue hover:bg-blue-900 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md">
                         Masuk
                     </button>
                 </form>
-
-                <p class="mt-8 text-center text-sm text-gray-600">
-                    Belum punya akun? 
-                    <a href="#" class="text-brand-blue font-bold hover:underline">Hubungi Admin Sekolah</a>
-                </p>
             </div>
         </div>
     </div>
 
     <!-- Script Supabase untuk Login -->
     <script>
-        // GANTI DENGAN KREDENSIAL SUPABASE ANDA
+        // 1. GANTI KREDENSIAL DI SINI
         const SUPABASE_URL = 'https://zbmeiymlfbviutgcxxcy.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_FufWDVwBpxEGC24_KOlXMw_r_rKvbOP';
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // 2. GUNAKAN NAMA VARIABEL BARU (supabaseClient) AGAR TIDAK BENTROK
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const loginForm = document.getElementById('loginForm');
         const submitBtn = document.getElementById('submitBtn');
 
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Mencegah reload halaman
+            e.preventDefault();
 
-            // Ubah teks tombol saat loading
             const originalText = submitBtn.innerText;
             submitBtn.innerText = 'Memproses...';
             submitBtn.disabled = true;
@@ -103,15 +89,14 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Proses login ke Supabase
-            const { data, error } = await supabase.auth.signInWithPassword({
+            // 3. GUNAKAN supabaseClient UNTUK LOGIN
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password,
             });
 
             if (error) {
                 alert('Login gagal: ' + error.message);
-                // Kembalikan tombol ke semula
                 submitBtn.innerText = originalText;
                 submitBtn.disabled = false;
             } else {
