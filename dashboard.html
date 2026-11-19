@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PELITA Inklusi</title>
     
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,8 +17,8 @@
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
                         brand: {
-                            dark: '#0f172a', // Slate 900
-                            blue: '#1e3a8a', // Blue 900
+                            dark: '#0f172a', 
+                            blue: '#1e3a8a', 
                             light: '#eff6ff',
                             gold: '#f59e0b',
                             goldhover: '#d97706'
@@ -30,7 +28,6 @@
             }
         }
     </script>
-    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
@@ -38,58 +35,39 @@
         .modal { display: none; }
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        /* Custom Scrollbar for luxury feel */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Styling Accordion */
         details > summary { list-style: none; cursor: pointer; }
         details > summary::-webkit-details-marker { display: none; }
         details[open] summary ~ * { animation: sweep .3s ease-in-out; }
         @keyframes sweep { 0% {opacity: 0; transform: translateY(-10px)} 100% {opacity: 1; transform: translateY(0)} }
-
-        /* Premium Card Hover */
-        .premium-card {
-            transition: all 0.3s ease;
-        }
-        .premium-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-        }
+        .premium-card { transition: all 0.3s ease; }
+        .premium-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
+        
+        /* Sembunyikan input file bawaan */
+        input[type="file"]::file-selector-button { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans flex h-screen overflow-hidden text-slate-800">
 
-    <!-- APLIKASI UTAMA -->
     <div id="mainApp" class="flex w-full h-full">
         
-        <!-- SIDEBAR (Premium Dark Blue) -->
+        <!-- SIDEBAR -->
         <aside class="w-64 bg-brand-dark text-white flex flex-col h-full shadow-2xl z-20 relative overflow-hidden">
-            <!-- Efek Latar Belakang -->
             <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-blue/40 to-transparent opacity-50 pointer-events-none"></div>
-
-            <!-- Logo & Branding Area -->
             <div class="flex flex-col items-center justify-center pt-8 pb-6 border-b border-white/10 relative z-10">
-                <!-- Logo SVG (Buku dengan Api Pelita) -->
                 <div class="w-16 h-16 bg-gradient-to-tr from-brand-gold to-yellow-300 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.4)] mb-3 transform rotate-3 hover:rotate-0 transition-transform duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-9 h-9 text-brand-dark">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                     </svg>
                 </div>
-                <!-- Teks Vertikal -->
                 <h1 class="text-2xl font-extrabold tracking-wider text-white">PELITA</h1>
                 <span class="text-[0.65rem] font-bold text-brand-gold tracking-[0.3em] mt-1">INKLUSI</span>
             </div>
             
-            <!-- Navigasi -->
             <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto relative z-10">
                 <a href="#" onclick="switchView('beranda')" id="nav-beranda" class="nav-link flex items-center gap-3 bg-gradient-to-r from-brand-blue to-blue-800 text-white px-4 py-3 rounded-xl font-semibold shadow-md transition-all">
                     <span class="text-lg">🏠</span> Beranda
@@ -108,7 +86,6 @@
                 </a>
             </nav>
 
-            <!-- Logout -->
             <div class="p-5 border-t border-white/10 relative z-10">
                 <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 text-rose-300 hover:text-white hover:bg-rose-500/20 border border-rose-500/30 px-4 py-2.5 rounded-xl font-medium transition-all">
                     <span>🚪</span> Keluar
@@ -118,8 +95,6 @@
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
-            
-            <!-- HEADER (Glassmorphism) -->
             <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 z-10 sticky top-0">
                 <div class="relative w-96 group">
                     <input type="text" id="searchInput" onkeyup="filterModules()" placeholder="Cari modul ajar, mata pelajaran..." 
@@ -138,16 +113,12 @@
                 </div>
             </header>
 
-            <!-- CONTENT AREA -->
             <div class="flex-1 overflow-y-auto p-8 relative">
                 
-                <!-- 1. VIEW BERANDA -->
+                <!-- BERANDA -->
                 <section id="view-beranda" class="view-section active max-w-7xl mx-auto">
-                    <!-- Banner Premium -->
                     <div class="bg-gradient-to-r from-brand-dark via-brand-blue to-blue-900 rounded-3xl p-10 text-white mb-10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-blue-800/50">
-                        <!-- Ornamen -->
                         <div class="absolute right-0 top-0 w-64 h-64 bg-brand-gold rounded-full mix-blend-screen filter blur-[80px] opacity-20 pointer-events-none"></div>
-                        
                         <div class="relative z-10">
                             <h2 class="text-3xl font-extrabold mb-2 tracking-tight">Selamat datang kembali! 👋</h2>
                             <p class="text-blue-200 text-sm max-w-xl">Mari berkolaborasi mencerdaskan anak bangsa. Bagikan modul ajar adaptif Anda dan bantu sesama guru menciptakan kelas inklusif.</p>
@@ -157,34 +128,21 @@
                         </button>
                     </div>
 
-                    <!-- Statistik -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-slate-500 text-sm font-semibold">Total Modul</p>
-                                <span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📚</span>
-                            </div>
+                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Total Modul</p><span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📚</span></div>
                             <p class="text-4xl font-extrabold text-slate-800" id="statTotalModul">0</p>
                         </div>
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-slate-500 text-sm font-semibold">Total Murid</p>
-                                <span class="p-2 bg-purple-50 text-purple-600 rounded-lg text-lg">👧</span>
-                            </div>
+                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Total Murid</p><span class="p-2 bg-purple-50 text-purple-600 rounded-lg text-lg">👧</span></div>
                             <p class="text-4xl font-extrabold text-slate-800" id="statTotalMurid">0</p>
                         </div>
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-slate-500 text-sm font-semibold">Diskusi Aktif</p>
-                                <span class="p-2 bg-green-50 text-green-600 rounded-lg text-lg">💬</span>
-                            </div>
+                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Diskusi Aktif</p><span class="p-2 bg-green-50 text-green-600 rounded-lg text-lg">💬</span></div>
                             <p class="text-4xl font-extrabold text-slate-800" id="statTotalForum">0</p>
                         </div>
                          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-slate-500 text-sm font-semibold">Guru Kontributor</p>
-                                <span class="p-2 bg-amber-50 text-amber-600 rounded-lg text-lg">🏆</span>
-                            </div>
+                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Guru Kontributor</p><span class="p-2 bg-amber-50 text-amber-600 rounded-lg text-lg">🏆</span></div>
                             <p class="text-4xl font-extrabold text-slate-800">1</p>
                         </div>
                     </div>
@@ -200,7 +158,7 @@
                     </div>
                 </section>
 
-                <!-- 2. VIEW BANK MODUL -->
+                <!-- BANK MODUL -->
                 <section id="view-bank-modul" class="view-section max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
                         <div>
@@ -216,7 +174,7 @@
                     </div>
                 </section>
 
-                <!-- 3. VIEW PANDUAN ADAPTASI -->
+                <!-- PANDUAN ADAPTASI -->
                 <section id="view-panduan" class="view-section max-w-4xl mx-auto">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2 tracking-tight">Panduan Adaptasi Pembelajaran</h2>
                     <p class="text-slate-500 mb-8 text-sm">Panduan komprehensif untuk guru reguler dalam memodifikasi modul ajar bagi PDBK.</p>
@@ -224,10 +182,7 @@
                     <div class="space-y-4">
                         <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card" open>
                             <summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>
-                                    Prinsip Dasar Adaptasi Kurikulum
-                                </div>
+                                <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>Prinsip Dasar Adaptasi Kurikulum</div>
                                 <span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
                             </summary>
                             <div class="p-6 text-slate-600 space-y-4 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl">
@@ -242,10 +197,7 @@
 
                         <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card">
                             <summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">2</span>
-                                    Langkah-Langkah Modifikasi Modul Ajar
-                                </div>
+                                <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">2</span>Langkah-Langkah Modifikasi Modul Ajar</div>
                                 <span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
                             </summary>
                             <div class="p-6 text-slate-600 space-y-4 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl">
@@ -261,10 +213,7 @@
 
                         <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card">
                             <summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>
-                                    Tips Spesifik Berdasarkan Jenis Ketunaan
-                                </div>
+                                <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>Tips Spesifik Berdasarkan Jenis Ketunaan</div>
                                 <span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
                             </summary>
                             <div class="p-6 text-slate-600 space-y-6 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl">
@@ -297,7 +246,7 @@
                     </div>
                 </section>
 
-                <!-- 4. VIEW PROFIL MURID PDBK -->
+                <!-- PROFIL MURID -->
                 <section id="view-profil" class="view-section max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
                         <div>
@@ -308,13 +257,12 @@
                             + Tambah Murid
                         </button>
                     </div>
-                    
                     <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <p class="text-slate-500 col-span-3 text-center py-8">Memuat data murid...</p>
                     </div>
                 </section>
 
-                <!-- 5. VIEW FORUM DISKUSI -->
+                <!-- FORUM DISKUSI -->
                 <section id="view-forum" class="view-section max-w-4xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
                         <div>
@@ -329,21 +277,21 @@
                         <p class="text-slate-500 text-center py-8">Memuat diskusi...</p>
                     </div>
                 </section>
-
             </div>
         </main>
     </div>
 
-    <!-- ================= MODAL MODUL ================= -->
+    <!-- MODAL MODUL (UPLOAD FILE / LINK) -->
     <div id="moduleModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all">
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all max-h-[90vh] flex flex-col">
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0">
                 <h3 id="modalTitle" class="text-lg font-bold text-slate-800">Unggah Modul Baru</h3>
                 <button onclick="closeModal('moduleModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button>
             </div>
-            <form id="moduleForm" class="p-6">
+            <form id="moduleForm" class="p-6 overflow-y-auto">
                 <input type="hidden" id="originalId" value="">
                 <input type="hidden" id="originalAuthor" value="">
+                
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Mata Pelajaran</label>
@@ -358,11 +306,39 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Judul Modul</label>
                     <input type="text" id="title" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Pengenalan Pecahan Sederhana">
                 </div>
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi / Cara Adaptasi</label>
-                    <textarea id="description" rows="3" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Jelaskan secara singkat modifikasi yang dilakukan..."></textarea>
+                    <textarea id="description" rows="2" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Jelaskan secara singkat modifikasi yang dilakukan..."></textarea>
                 </div>
-                <div class="flex justify-end gap-3">
+
+                <!-- OPSI FILE ATAU LINK -->
+                <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <label class="block text-sm font-semibold text-slate-700 mb-3">Lampiran Modul (Opsional)</label>
+                    
+                    <div class="flex gap-4 mb-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="lampiranType" value="file" checked onchange="toggleLampiran('file')" class="w-4 h-4 text-brand-blue focus:ring-brand-blue">
+                            <span class="text-sm font-medium">Upload File (PDF/Word)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="lampiranType" value="link" onchange="toggleLampiran('link')" class="w-4 h-4 text-brand-blue focus:ring-brand-blue">
+                            <span class="text-sm font-medium">Tempel Link (G-Drive dll)</span>
+                        </label>
+                    </div>
+
+                    <!-- Input File -->
+                    <div id="inputFileContainer">
+                        <input type="file" id="moduleFile" accept=".pdf, .doc, .docx, .ppt, .pptx" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-brand-blue hover:file:bg-blue-100 transition-all border border-slate-300 rounded-xl bg-white cursor-pointer">
+                        <p class="text-[0.65rem] text-slate-400 mt-2">*Maksimal ukuran file disarankan 5MB.</p>
+                    </div>
+
+                    <!-- Input Link -->
+                    <div id="inputLinkContainer" class="hidden">
+                        <input type="url" id="moduleLink" placeholder="https://drive.google.com/..." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all bg-white">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2">
                     <button type="button" onclick="closeModal('moduleModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-slate-50 transition-colors">Batal</button>
                     <button type="submit" id="saveBtn" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Simpan Modul</button>
                 </div>
@@ -370,7 +346,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL MURID ================= -->
+    <!-- MODAL MURID -->
     <div id="studentModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden transform transition-all">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -409,7 +385,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL FORUM ================= -->
+    <!-- MODAL FORUM -->
     <div id="forumModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -482,6 +458,17 @@
             }
         });
 
+        // --- FITUR LAMPIRAN (FILE / LINK) ---
+        function toggleLampiran(type) {
+            if (type === 'file') {
+                document.getElementById('inputFileContainer').classList.remove('hidden');
+                document.getElementById('inputLinkContainer').classList.add('hidden');
+            } else {
+                document.getElementById('inputFileContainer').classList.add('hidden');
+                document.getElementById('inputLinkContainer').classList.remove('hidden');
+            }
+        }
+
         // --- FITUR MODUL ---
         async function fetchModules() {
             document.getElementById('homeModulesGrid').innerHTML = '<p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p>';
@@ -520,14 +507,21 @@
                     </div>
                     <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex flex-col gap-3">
                         <p class="text-xs text-slate-500 font-medium">Oleh: <span class="text-brand-dark font-bold">${modul.author_name}</span></p>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center mt-1">
                             <div class="flex gap-4 text-slate-400 text-xs font-medium">
                                 <span class="flex items-center gap-1" title="Diunduh">⬇️ ${modul.download_count || 0}</span>
                                 <span class="flex items-center gap-1" title="Dimodifikasi">🔄 ${modul.adaptation_count || 0}</span>
                             </div>
-                            <button onclick="openModal('adapt', ${modul.id})" class="bg-white border border-slate-200 text-slate-700 hover:bg-brand-dark hover:text-white hover:border-brand-dark font-bold py-1.5 px-4 rounded-lg text-xs transition-all shadow-sm">
-                                Adaptasi
-                            </button>
+                            <div class="flex gap-2">
+                                ${modul.file_url ? `
+                                    <a href="${modul.file_url}" target="_blank" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white font-bold py-1.5 px-3 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1">
+                                        🔗 Buka Modul
+                                    </a>
+                                ` : ''}
+                                <button onclick="openModal('adapt', ${modul.id})" class="bg-white border border-slate-200 text-slate-700 hover:bg-brand-dark hover:text-white hover:border-brand-dark font-bold py-1.5 px-4 rounded-lg text-xs transition-all shadow-sm">
+                                    Adaptasi
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -545,6 +539,8 @@
             closeAllModals(); 
             document.getElementById('moduleModal').style.display = 'flex';
             document.getElementById('moduleForm').reset(); 
+            toggleLampiran('file'); // Default ke upload file
+            
             if (mode === 'upload') {
                 document.getElementById('modalTitle').innerText = 'Unggah Modul Baru';
                 document.getElementById('originalId').value = '';
@@ -562,37 +558,82 @@
             }
         }
 
+        // PROSES SIMPAN MODUL (DENGAN UPLOAD FILE ATAU LINK)
         document.getElementById('moduleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveBtn');
-            btn.innerText = 'Menyimpan...'; btn.disabled = true;
+            const originalText = btn.innerText;
+            btn.innerText = 'Menyimpan...'; 
+            btn.disabled = true;
 
             const originalId = document.getElementById('originalId').value;
-            const newData = {
-                title: document.getElementById('title').value,
-                subject: document.getElementById('subject').value,
-                disability_type: document.getElementById('disability').value,
-                description: document.getElementById('description').value,
-                author_name: currentUser.email.split('@')[0],
-                author_id: currentUser.id
-            };
+            let fileUrl = null;
 
-            if (originalId) {
-                newData.description = `[Diadaptasi dari modul ${document.getElementById('originalAuthor').value}]\n\n` + newData.description;
-            }
+            // Cek apakah user memilih upload file atau link
+            const lampiranType = document.querySelector('input[name="lampiranType"]:checked').value;
 
-            const { error } = await supabaseClient.from('modules').insert([newData]);
+            try {
+                if (lampiranType === 'file') {
+                    const fileInput = document.getElementById('moduleFile');
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        // Buat nama file unik (timestamp + nama asli)
+                        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
+                        
+                        // Upload ke Supabase Storage bucket 'modul-files'
+                        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                            .from('modul-files')
+                            .upload(fileName, file);
 
-            if (error) { alert('Gagal: ' + error.message); } 
-            else {
+                        if (uploadError) throw new Error('Gagal upload file: ' + uploadError.message);
+
+                        // Ambil URL publik dari file yang diupload
+                        const { data: urlData } = supabaseClient.storage
+                            .from('modul-files')
+                            .getPublicUrl(fileName);
+                        
+                        fileUrl = urlData.publicUrl;
+                    }
+                } else {
+                    // Jika memilih link
+                    const linkInput = document.getElementById('moduleLink').value;
+                    if (linkInput) fileUrl = linkInput;
+                }
+
+                const newData = {
+                    title: document.getElementById('title').value,
+                    subject: document.getElementById('subject').value,
+                    disability_type: document.getElementById('disability').value,
+                    description: document.getElementById('description').value,
+                    file_url: fileUrl, // Simpan URL file/link ke database
+                    author_name: currentUser.email.split('@')[0],
+                    author_id: currentUser.id
+                };
+
+                if (originalId) {
+                    newData.description = `[Diadaptasi dari modul ${document.getElementById('originalAuthor').value}]\n\n` + newData.description;
+                }
+
+                // Insert ke tabel database
+                const { error } = await supabaseClient.from('modules').insert([newData]);
+
+                if (error) throw new Error('Gagal menyimpan data: ' + error.message);
+
+                // Jika ini adalah proses adaptasi, update counter di modul asli
                 if (originalId) {
                     const original = allModulesData.find(m => m.id == originalId);
                     await supabaseClient.from('modules').update({ adaptation_count: (original.adaptation_count || 0) + 1 }).eq('id', originalId);
                 }
+                
                 closeModal('moduleModal');
                 fetchModules(); 
+
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                btn.innerText = originalText; 
+                btn.disabled = false;
             }
-            btn.innerText = 'Simpan'; btn.disabled = false;
         });
 
         // --- FITUR PROFIL MURID ---
