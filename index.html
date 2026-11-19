@@ -3,74 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Portal InklusiBerbagi</title>
+    <title>Login - PELITA Inklusi</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { dark: '#0f172a', blue: '#1e3a8a', gold: '#f59e0b' }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        .bg-brand-blue { background-color: #1E3A8A; }
-        .text-brand-blue { color: #1E3A8A; }
-        .bg-brand-yellow { background-color: #F59E0B; }
-    </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-slate-50 font-sans min-h-screen flex">
 
-    <div class="min-h-screen flex">
-        <!-- Sisi Kiri: Branding -->
-        <div class="hidden lg:flex w-1/2 bg-brand-blue text-white flex-col justify-center items-center p-12 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-64 h-64 bg-blue-800 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
-            <div class="absolute bottom-0 right-0 w-64 h-64 bg-brand-yellow rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
-            
-            <div class="z-10 text-center">
-                <h1 class="text-4xl font-bold mb-4">InklusiBerbagi</h1>
-                <p class="text-lg text-blue-100 max-w-md mx-auto">
-                    Platform gotong royong modul ajar berdiferensiasi untuk Peserta Didik Berkebutuhan Khusus (PDBK).
-                </p>
-                <div class="mt-10 bg-white/10 p-8 rounded-xl border border-white/20 backdrop-blur-sm">
-                    <p class="italic">"Sendiri kita mungkin bisa cepat, tapi bersama kita bisa sampai jauh."</p>
-                </div>
+    <!-- SISI KIRI: Ilustrasi & Branding (Disembunyikan di Mobile) -->
+    <div class="hidden lg:flex w-1/2 bg-brand-dark relative overflow-hidden items-center justify-center">
+        
+        <!-- Gambar Latar dengan Blend Mode -->
+        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+             alt="Ilustrasi Kelas" 
+             class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40">
+        
+        <!-- Overlay Gradasi Biru -->
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-blue/90 to-black/90"></div>
+
+        <!-- Ornamen Cahaya (Blob) -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-brand-gold rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
+
+        <!-- Konten Teks & Logo -->
+        <div class="relative z-10 text-center px-12 max-w-lg">
+            <!-- Logo SVG -->
+            <div class="mx-auto w-20 h-20 bg-gradient-to-tr from-brand-gold to-yellow-300 rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.5)] mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-12 h-12 text-brand-dark">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
             </div>
-        </div>
+            
+            <h1 class="text-5xl font-extrabold tracking-wider text-white mb-2">PELITA</h1>
+            <span class="text-sm font-bold text-brand-gold tracking-[0.4em] mb-8 block">INKLUSI</span>
 
-        <!-- Sisi Kanan: Form Login -->
-        <div class="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-white">
-            <div class="w-full max-w-md">
-                <div class="lg:hidden text-center mb-8">
-                    <h1 class="text-3xl font-bold text-brand-blue">InklusiBerbagi</h1>
-                </div>
+            <p class="text-lg text-blue-100/90 leading-relaxed mb-10">
+                Platform gotong royong modul ajar berdiferensiasi untuk mewujudkan pendidikan yang inklusif bagi seluruh anak bangsa.
+            </p>
 
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Selamat Datang Kembali</h2>
-                <p class="text-gray-500 mb-8">Silakan masuk menggunakan akun guru Anda.</p>
-
-                <form id="loginForm">
-                    <div class="mb-5">
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Guru</label>
-                        <input type="email" id="email" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none transition"
-                            placeholder="nama@sekolah.sch.id">
-                    </div>
-
-                    <div class="mb-6">
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input type="password" id="password" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none transition"
-                            placeholder="••••••••">
-                    </div>
-
-                    <button type="submit" id="submitBtn"
-                        class="w-full bg-brand-blue hover:bg-blue-900 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md">
-                        Masuk
-                    </button>
-                </form>
+            <!-- Kotak Kutipan Glassmorphism -->
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-xl">
+                <p class="italic text-blue-50 text-sm">"Sendiri kita mungkin bisa cepat, tapi bersama kita bisa sampai jauh."</p>
             </div>
         </div>
     </div>
 
-    <!-- Script Supabase -->
+    <!-- SISI KANAN: Form Login -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-slate-50 relative">
+        <!-- Ornamen Latar Kanan -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-brand-gold rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"></div>
+
+        <div class="w-full max-w-md bg-white p-8 md:p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 relative z-10">
+            
+            <!-- Logo Mobile -->
+            <div class="lg:hidden text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-brand-dark">PELITA <span class="text-brand-gold">Inklusi</span></h1>
+            </div>
+
+            <h2 class="text-3xl font-extrabold text-slate-800 mb-2 tracking-tight">Selamat Datang</h2>
+            <p class="text-slate-500 mb-8 text-sm">Silakan masuk menggunakan akun guru Anda.</p>
+
+            <form id="loginForm">
+                <!-- Input Email -->
+                <div class="mb-5">
+                    <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Email Guru</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                        </div>
+                        <input type="email" id="email" required
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold focus:border-brand-gold outline-none transition-all text-sm font-medium"
+                            placeholder="nama@sekolah.sch.id">
+                    </div>
+                </div>
+
+                <!-- Input Password -->
+                <div class="mb-6">
+                    <label for="password" class="block text-sm font-bold text-slate-700 mb-2">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <input type="password" id="password" required
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-gold focus:border-brand-gold outline-none transition-all text-sm font-medium"
+                            placeholder="••••••••">
+                    </div>
+                </div>
+
+                <!-- Ingat Saya & Lupa Password -->
+                <div class="flex items-center justify-between mb-8">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="remember" class="w-4 h-4 text-brand-dark border-slate-300 rounded focus:ring-brand-gold">
+                        <span class="text-sm text-slate-600 font-medium">Ingat saya</span>
+                    </label>
+                    <a href="#" class="text-sm text-brand-gold font-bold hover:text-yellow-600 transition-colors">Lupa Password?</a>
+                </div>
+
+                <!-- Tombol Masuk -->
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-brand-dark hover:bg-brand-blue text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg hover:shadow-brand-blue/30 transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                    <span>Masuk ke Dashboard</span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <p class="mt-8 text-center text-sm text-slate-500">
+                Belum punya akun? <br>
+                <a href="#" class="text-brand-dark font-bold hover:underline mt-1 inline-block">Hubungi Admin Sekolah</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- SCRIPT SUPABASE -->
     <script>
-        // Kredensial Supabase sudah dimasukkan
         const SUPABASE_URL = 'https://zbmeiymlfbviutgcxxcy.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_FufWDVwBpxEGC24_KOlXMw_r_rKvbOP';
-
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const loginForm = document.getElementById('loginForm');
@@ -79,8 +161,8 @@
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = 'Memproses...';
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Memverifikasi...';
             submitBtn.disabled = true;
 
             const email = document.getElementById('email').value;
@@ -93,9 +175,10 @@
 
             if (error) {
                 alert('Login gagal: ' + error.message);
-                submitBtn.innerText = originalText;
+                submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             } else {
+                // Jika berhasil, arahkan ke dashboard
                 window.location.href = 'dashboard.html';
             }
         });
