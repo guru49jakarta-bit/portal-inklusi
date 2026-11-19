@@ -14,7 +14,12 @@
         .modal { display: none; }
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        /* Styling Accordion */
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * { animation: sweep .3s ease-in-out; }
+        @keyframes sweep { 0% {opacity: 0; transform: translateY(-10px)} 100% {opacity: 1; transform: translateY(0)} }
     </style>
 </head>
 <body class="bg-gray-100 font-sans flex h-screen overflow-hidden">
@@ -29,7 +34,6 @@
             </div>
             
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <!-- Menu Navigasi dengan fungsi switchView -->
                 <a href="#" onclick="switchView('beranda')" id="nav-beranda" class="nav-link flex items-center gap-3 bg-blue-800 text-white px-4 py-3 rounded-lg font-medium transition">
                     <span>🏠</span> Beranda
                 </a>
@@ -60,7 +64,6 @@
             <!-- HEADER -->
             <header class="h-20 bg-white shadow-sm flex items-center justify-between px-8 z-10">
                 <div class="relative w-96">
-                    <!-- Pencarian hanya aktif di Bank Modul / Beranda -->
                     <input type="text" id="searchInput" onkeyup="filterModules()" placeholder="Cari modul ajar..." 
                         class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue bg-gray-50">
                     <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
@@ -98,21 +101,20 @@
                             <p class="text-3xl font-bold text-gray-800" id="statTotalModul">0</p>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <p class="text-gray-500 text-sm font-medium mb-1">Guru Kontributor</p>
-                            <p class="text-3xl font-bold text-gray-800">1</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <p class="text-gray-500 text-sm font-medium mb-1">Profil PDBK Terdata</p>
-                            <p class="text-3xl font-bold text-gray-800">0</p>
+                            <p class="text-gray-500 text-sm font-medium mb-1">Total Murid</p>
+                            <p class="text-3xl font-bold text-gray-800" id="statTotalMurid">0</p>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <p class="text-gray-500 text-sm font-medium mb-1">Diskusi Aktif</p>
                             <p class="text-3xl font-bold text-gray-800" id="statTotalForum">0</p>
                         </div>
+                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <p class="text-gray-500 text-sm font-medium mb-1">Guru Kontributor</p>
+                            <p class="text-3xl font-bold text-gray-800">1</p>
+                        </div>
                     </div>
 
                     <h3 class="text-xl font-bold text-gray-800 mb-6">Modul Terbaru Lintas Mapel</h3>
-                    <!-- Container Modul Beranda (Hanya 3 terbaru) -->
                     <div id="homeModulesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
                 </section>
 
@@ -124,31 +126,98 @@
                             + Unggah Modul
                         </button>
                     </div>
-                    <!-- Container Modul Lengkap -->
                     <div id="allModulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </section>
 
-                <!-- 3. VIEW PANDUAN -->
+                <!-- 3. VIEW PANDUAN ADAPTASI (LENGKAP) -->
                 <section id="view-panduan" class="view-section">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Panduan Adaptasi Pembelajaran</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <h3 class="text-lg font-bold mb-2">1. Apa itu PDBK?</h3>
-                            <p class="text-gray-600 text-sm">Peserta Didik Berkebutuhan Khusus (PDBK) adalah murid yang memerlukan penyesuaian dalam pembelajaran karena kondisi fisik, sensorik, atau kognitifnya.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <h3 class="text-lg font-bold mb-2">2. Prinsip Modifikasi Modul</h3>
-                            <p class="text-gray-600 text-sm">Modifikasi dapat dilakukan pada isi materi (diperkecil/diperluas), proses (cara belajar), dan produk (cara menilai).</p>
-                        </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Panduan Adaptasi Pembelajaran Inklusi</h2>
+                    <p class="text-gray-500 mb-6">Panduan komprehensif untuk guru reguler dalam memodifikasi modul ajar bagi PDBK.</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Accordion 1 -->
+                        <details class="bg-white rounded-xl shadow-sm border border-gray-200 group" open>
+                            <summary class="p-5 font-bold text-lg text-brand-blue flex justify-between items-center bg-gray-50 rounded-t-xl group-open:rounded-b-none">
+                                1. Prinsip Dasar Adaptasi Kurikulum
+                                <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="p-6 text-gray-700 space-y-3 text-sm leading-relaxed">
+                                <p>Adaptasi bukan berarti menurunkan standar, melainkan menyesuaikan cara agar murid dapat mengakses materi. Ada tiga prinsip utama:</p>
+                                <ul class="list-disc pl-5 space-y-2">
+                                    <li><strong>Modifikasi Isi (Content):</strong> Menyederhanakan materi atau memberikan materi tambahan sesuai kemampuan.</li>
+                                    <li><strong>Modifikasi Proses (Process):</strong> Mengubah cara penyampaian (visual, auditori, kinestetik) atau memberikan waktu lebih lama.</li>
+                                    <li><strong>Modifikasi Produk (Product):</strong> Mengubah cara murid menunjukkan pemahaman (misal: lisan bukan tulisan, atau menggambar bukan mengerjakan soal).</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <!-- Accordion 2 -->
+                        <details class="bg-white rounded-xl shadow-sm border border-gray-200 group">
+                            <summary class="p-5 font-bold text-lg text-brand-blue flex justify-between items-center bg-gray-50 rounded-t-xl group-open:rounded-b-none">
+                                2. Langkah-Langkah Modifikasi Modul Ajar
+                                <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="p-6 text-gray-700 space-y-3 text-sm leading-relaxed">
+                                <ol class="list-decimal pl-5 space-y-2">
+                                    <li><strong>Identifikasi Hambatan:</strong> Pahami jenis ketunaan dan hambatan belajar murid (misal: kesulitan melihat teks kecil).</li>
+                                    <li><strong>Tentukan Tujuan:</strong> Apakah tujuan pembelajaran yang sama bisa dicapai dengan cara berbeda?</li>
+                                    <li><strong>Pilih Alat Bantu:</strong> Gunakan media adaptif (buku audio, teks besar, gambar taktil).</li>
+                                    <li><strong>Buat Penyesuaian:</strong> Ubah format LKPD (Lembar Kerja) agar sesuai.</li>
+                                    <li><strong>Evaluasi:</strong> Lakukan asesmen formatif untuk melihat apakah adaptasi berhasil.</li>
+                                </ol>
+                            </div>
+                        </details>
+
+                        <!-- Accordion 3 -->
+                        <details class="bg-white rounded-xl shadow-sm border border-gray-200 group">
+                            <summary class="p-5 font-bold text-lg text-brand-blue flex justify-between items-center bg-gray-50 rounded-t-xl group-open:rounded-b-none">
+                                3. Tips Spesifik Berdasarkan Jenis Ketunaan
+                                <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="p-6 text-gray-700 space-y-4 text-sm leading-relaxed">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">A. Tunanetra (Low Vision / Buta Total)</h4>
+                                    <ul class="list-disc pl-5">
+                                        <li>Gunakan teks dengan ukuran besar dan kontras tinggi (hitam tebal di latar putih).</li>
+                                        <li>Untuk tuna netra total, gunakan media taktil (huruf timbul) atau audio (screen reader).</li>
+                                        <li>Posisikan murid di baris paling depan.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mt-2">B. Tunarungu</h4>
+                                    <ul class="list-disc pl-5">
+                                        <li>Pastikan wajah guru terlihat jelas saat berbicara (jangan membelakangi murid).</li>
+                                        <li>Gunakan banyak visual, gambar, atau teks tertulis.</li>
+                                        <li>Jika ada video, pastikan ada teks (subtitles).</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mt-2">C. Autisme</h4>
+                                    <ul class="list-disc pl-5">
+                                        <li>Berikan instruksi yang singkat, jelas, dan literal (hindari kiasan).</li>
+                                        <li>Gunakan jadwal visual (gambar urutan kegiatan).</li>
+                                        <li>Hindari kebisingan dan cahaya yang terlalu terang.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                 </section>
 
-                <!-- 4. VIEW PROFIL MURID -->
+                <!-- 4. VIEW PROFIL MURID PDBK (CRUD) -->
                 <section id="view-profil" class="view-section">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Profil Murid PDBK Terdata</h2>
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center text-gray-500">
-                        <p>Belum ada data murid yang ditambahkan.</p>
-                        <p class="text-sm mt-2">(Fitur input data murid akan diimplementasikan pada tahap backend lanjutan).</p>
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">Profil Murid PDBK</h2>
+                            <p class="text-sm text-gray-500">Kelola data karakteristik dan akomodasi murid berkebutuhan khusus.</p>
+                        </div>
+                        <button onclick="openStudentModal()" class="bg-brand-blue hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition text-sm shadow-md">
+                            + Tambah Murid
+                        </button>
+                    </div>
+                    
+                    <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Kartu murid akan dirender di sini -->
                     </div>
                 </section>
 
@@ -160,16 +229,14 @@
                             + Buat Diskusi Baru
                         </button>
                     </div>
-                    <div id="forumList" class="space-y-4">
-                        <p class="text-gray-500 text-center py-8">Memuat diskusi...</p>
-                    </div>
+                    <div id="forumList" class="space-y-4"></div>
                 </section>
 
             </div>
         </main>
     </div>
 
-    <!-- MODAL MODUL (UPLOAD/ADAPTASI) -->
+    <!-- ================= MODAL MODUL ================= -->
     <div id="moduleModal" class="modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
@@ -205,7 +272,46 @@
         </div>
     </div>
 
-    <!-- MODAL FORUM BARU -->
+    <!-- ================= MODAL MURID (ADD/EDIT) ================= -->
+    <div id="studentModal" class="modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 id="studentModalTitle" class="text-lg font-bold text-gray-800">Tambah Profil Murid</h3>
+                <button onclick="closeModal('studentModal')" class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="studentForm" class="p-6">
+                <input type="hidden" id="studentId" value="">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Murid / Inisial</label>
+                        <input type="text" id="studentName" required class="w-full px-3 py-2 border rounded-lg outline-none focus:border-brand-blue">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                        <input type="text" id="studentClass" required placeholder="Cth: 4A" class="w-full px-3 py-2 border rounded-lg outline-none focus:border-brand-blue">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kebutuhan Khusus (PDBK)</label>
+                    <input type="text" id="studentDisability" required placeholder="Cth: Autisme, Tunarungu" class="w-full px-3 py-2 border rounded-lg outline-none focus:border-brand-blue">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Karakteristik Belajar</label>
+                    <textarea id="studentChar" rows="2" class="w-full px-3 py-2 border rounded-lg outline-none focus:border-brand-blue" placeholder="Cth: Cepat bosan, butuh instruksi visual..."></textarea>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Akomodasi yang Disarankan</label>
+                    <textarea id="studentAccom" rows="2" class="w-full px-3 py-2 border rounded-lg outline-none focus:border-brand-blue" placeholder="Cth: Waktu ujian ditambah 30 menit..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('studentModal')" class="px-4 py-2 border rounded-lg hover:bg-gray-100">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-blue text-white rounded-lg hover:bg-blue-800 font-bold">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL FORUM ================= -->
     <div id="forumModal" class="modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
             <div class="px-6 py-4 border-b flex justify-between items-center bg-gray-50">
@@ -237,20 +343,17 @@
 
         let currentUser = null;
         let allModulesData = []; 
+        let allStudentsData = [];
 
-        // --- 1. NAVIGASI SPA (Pindah Halaman Tanpa Refresh) ---
+        // --- 1. NAVIGASI SPA ---
         function switchView(viewName) {
-            // Sembunyikan semua view
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            // Tampilkan view yang dipilih
             document.getElementById('view-' + viewName).classList.add('active');
 
-            // Reset gaya sidebar
             document.querySelectorAll('.nav-link').forEach(el => {
                 el.classList.remove('bg-blue-800', 'text-white', 'font-medium');
                 el.classList.add('text-blue-100');
             });
-            // Highlight menu aktif
             const activeNav = document.getElementById('nav-' + viewName);
             activeNav.classList.remove('text-blue-100');
             activeNav.classList.add('bg-blue-800', 'text-white', 'font-medium');
@@ -278,30 +381,19 @@
             }
         });
 
-        // --- 3. FETCH DATA MODUL ---
+        // --- 3. FITUR MODUL ---
         async function fetchModules() {
-            const { data: modules, error } = await supabaseClient
-                .from('modules')
-                .select('*')
-                .order('created_at', { ascending: false });
-
+            const { data: modules, error } = await supabaseClient.from('modules').select('*').order('created_at', { ascending: false });
             if (error) {
-                console.error(error);
                 document.getElementById('homeModulesGrid').innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
-                document.getElementById('allModulesGrid').innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
                 return;
             }
-
             allModulesData = modules; 
             document.getElementById('statTotalModul').innerText = modules.length;
-            
-            // Render Beranda (Maksimal 3)
             renderModules(modules.slice(0, 3), 'homeModulesGrid');
-            // Render Bank Modul (Semua)
             renderModules(modules, 'allModulesGrid');
         }
 
-        // Render HTML Kartu Modul
         function renderModules(modules, containerId) {
             const grid = document.getElementById(containerId);
             if (modules.length === 0) {
@@ -335,22 +427,16 @@
             `).join('');
         }
 
-        // Pencarian Global (Beranda & Bank Modul)
         function filterModules() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allModulesData.filter(mod => 
-                mod.title.toLowerCase().includes(query) || 
-                mod.subject.toLowerCase().includes(query)
-            );
+            const filtered = allModulesData.filter(mod => mod.title.toLowerCase().includes(query) || mod.subject.toLowerCase().includes(query));
             renderModules(filtered.slice(0, 3), 'homeModulesGrid');
             renderModules(filtered, 'allModulesGrid');
         }
 
-        // --- 4. LOGIKA MODAL MODUL ---
         function openModal(mode, id = null) {
             document.getElementById('moduleModal').style.display = 'flex';
             document.getElementById('moduleForm').reset(); 
-
             if (mode === 'upload') {
                 document.getElementById('modalTitle').innerText = 'Unggah Modul Baru';
                 document.getElementById('originalId').value = '';
@@ -368,16 +454,10 @@
             }
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Submit Form Modul (Upload/Adaptasi)
         document.getElementById('moduleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveBtn');
-            btn.innerText = 'Menyimpan...';
-            btn.disabled = true;
+            btn.innerText = 'Menyimpan...'; btn.disabled = true;
 
             const originalId = document.getElementById('originalId').value;
             const newData = {
@@ -395,9 +475,8 @@
 
             const { error } = await supabaseClient.from('modules').insert([newData]);
 
-            if (error) {
-                alert('Gagal: ' + error.message);
-            } else {
+            if (error) { alert('Gagal: ' + error.message); } 
+            else {
                 if (originalId) {
                     const original = allModulesData.find(m => m.id == originalId);
                     await supabaseClient.from('modules').update({ adaptation_count: (original.adaptation_count || 0) + 1 }).eq('id', originalId);
@@ -405,27 +484,134 @@
                 closeModal('moduleModal');
                 fetchModules(); 
             }
-            btn.innerText = 'Simpan';
-            btn.disabled = false;
+            btn.innerText = 'Simpan'; btn.disabled = false;
         });
 
-        // --- 5. LOGIKA FORUM DISKUSI ---
-        async function fetchForum() {
-            const list = document.getElementById('forumList');
-            const { data, error } = await supabaseClient.from('forum_posts').select('*').order('created_at', { ascending: false });
-
+        // --- 4. FITUR PROFIL MURID (CRUD) ---
+        async function fetchStudents() {
+            const { data, error } = await supabaseClient.from('students').select('*').order('created_at', { ascending: false });
             if (error) {
-                list.innerHTML = `<p class="text-red-500">Gagal memuat forum: ${error.message}</p>`;
+                document.getElementById('studentsGrid').innerHTML = `<p class="text-red-500">Gagal memuat data murid: ${error.message}</p>`;
+                return;
+            }
+            allStudentsData = data;
+            document.getElementById('statTotalMurid').innerText = data.length;
+            renderStudents();
+        }
+
+        function renderStudents() {
+            const grid = document.getElementById('studentsGrid');
+            if (allStudentsData.length === 0) {
+                grid.innerHTML = `<p class="text-gray-500 col-span-3 text-center py-8 bg-white rounded-xl">Belum ada data murid. Silakan tambah data.</p>`;
                 return;
             }
 
+            grid.innerHTML = allStudentsData.map(student => `
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                    <div class="p-6 flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-gray-800">${student.name}</h4>
+                            <span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">Kelas ${student.class_level}</span>
+                        </div>
+                        <span class="inline-block bg-purple-100 text-purple-800 text-xs font-bold px-2.5 py-1 rounded mb-3">${student.disability_type}</span>
+                        
+                        <div class="mb-2">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-wide">Karakteristik</p>
+                            <p class="text-sm text-gray-700">${student.characteristics || '-'}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-wide">Akomodasi</p>
+                            <p class="text-sm text-gray-700">${student.accommodations || '-'}</p>
+                        </div>
+                    </div>
+                    <!-- Hanya tampilkan tombol edit/hapus jika user adalah pembuatnya -->
+                    ${student.author_id === currentUser.id ? `
+                    <div class="px-6 py-3 bg-gray-50 border-t flex justify-end gap-2">
+                        <button onclick="editStudent(${student.id})" class="text-blue-600 hover:text-blue-800 text-sm font-semibold px-2 py-1">Edit</button>
+                        <button onclick="deleteStudent(${student.id})" class="text-red-600 hover:text-red-800 text-sm font-semibold px-2 py-1">Hapus</button>
+                    </div>
+                    ` : `<div class="px-6 py-3 bg-gray-50 border-t text-xs text-gray-400 italic">Dibuat oleh: ${student.author_name || 'Guru Lain'}</div>`}
+                </div>
+            `).join('');
+        }
+
+        function openStudentModal() {
+            document.getElementById('studentModal').style.display = 'flex';
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentId').value = '';
+            document.getElementById('studentModalTitle').innerText = 'Tambah Profil Murid';
+        }
+
+        function editStudent(id) {
+            const student = allStudentsData.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById('studentModal').style.display = 'flex';
+            document.getElementById('studentModalTitle').innerText = 'Edit Profil Murid';
+            
+            document.getElementById('studentId').value = student.id;
+            document.getElementById('studentName').value = student.name;
+            document.getElementById('studentClass').value = student.class_level;
+            document.getElementById('studentDisability').value = student.disability_type;
+            document.getElementById('studentChar').value = student.characteristics || '';
+            document.getElementById('studentAccom').value = student.accommodations || '';
+        }
+
+        async function deleteStudent(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data murid ini?')) {
+                const { error } = await supabaseClient.from('students').delete().eq('id', id);
+                if (error) alert('Gagal menghapus: ' + error.message);
+                else fetchStudents();
+            }
+        }
+
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerText = 'Menyimpan...'; btn.disabled = true;
+
+            const id = document.getElementById('studentId').value;
+            const data = {
+                name: document.getElementById('studentName').value,
+                class_level: document.getElementById('studentClass').value,
+                disability_type: document.getElementById('studentDisability').value,
+                characteristics: document.getElementById('studentChar').value,
+                accommodations: document.getElementById('studentAccom').value,
+                author_id: currentUser.id,
+                author_name: currentUser.email.split('@')[0]
+            };
+
+            let error;
+            if (id) {
+                // Mode Edit (Update)
+                const res = await supabaseClient.from('students').update(data).eq('id', id);
+                error = res.error;
+            } else {
+                // Mode Tambah (Insert)
+                const res = await supabaseClient.from('students').insert([data]);
+                error = res.error;
+            }
+
+            if (error) {
+                alert('Gagal menyimpan data: ' + error.message);
+            } else {
+                closeModal('studentModal');
+                fetchStudents();
+            }
+            btn.innerText = 'Simpan Data'; btn.disabled = false;
+        });
+
+        // --- 5. FITUR FORUM ---
+        async function fetchForum() {
+            const { data, error } = await supabaseClient.from('forum_posts').select('*').order('created_at', { ascending: false });
+            if (error) return;
             document.getElementById('statTotalForum').innerText = data.length;
 
+            const list = document.getElementById('forumList');
             if (data.length === 0) {
                 list.innerHTML = `<p class="text-center text-gray-500 py-8 bg-white rounded-xl">Belum ada diskusi. Mari mulai bertanya!</p>`;
                 return;
             }
-
             list.innerHTML = data.map(post => `
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <h4 class="font-bold text-lg text-gray-800 mb-1">${post.title}</h4>
@@ -447,19 +633,23 @@
             const author = currentUser.email.split('@')[0];
 
             const { error } = await supabaseClient.from('forum_posts').insert([{ title, content, author_name: author }]);
-
-            if (error) {
-                alert('Gagal mengirim diskusi: ' + error.message);
-            } else {
+            if (error) alert('Gagal: ' + error.message);
+            else {
                 closeModal('forumModal');
                 fetchForum();
             }
         });
 
+        // --- GLOBAL CLOSE MODAL ---
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
         // --- INISIALISASI ---
         async function init() {
             await checkAuth();
             await fetchModules();
+            await fetchStudents();
             await fetchForum();
         }
         init();
