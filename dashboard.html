@@ -32,7 +32,10 @@
     
     <style>
         #mainApp { display: none; }
+        
+        /* Perbaikan CSS Modal */
         .modal { display: none; }
+        
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -280,8 +283,9 @@
         </main>
     </div>
 
-    <!-- MODAL MODUL (UPLOAD FILE / LINK) -->
-    <div id="moduleModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <!-- ================= MODAL MODUL ================= -->
+    <!-- Perhatikan: class "flex" dihapus dari tag div modal -->
+    <div id="moduleModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all max-h-[90vh] flex flex-col">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0">
                 <h3 id="modalTitle" class="text-lg font-bold text-slate-800">Unggah Modul Baru</h3>
@@ -345,8 +349,8 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL MODUL (BARU) -->
-    <div id="detailModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <!-- ================= MODAL DETAIL MODUL ================= -->
+    <div id="detailModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all max-h-[90vh] flex flex-col">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0">
                 <h3 id="detailTitle" class="text-xl font-bold text-slate-800 leading-tight">Judul Modul</h3>
@@ -365,7 +369,7 @@
                 <button onclick="closeModal('detailModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-white transition-colors w-full md:w-auto">Tutup</button>
                 
                 <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-                    <!-- Tombol Download (Akan disembunyikan jika tidak ada file/link) -->
+                    <!-- Tombol Download -->
                     <a id="btnDownload" href="#" target="_blank" download class="hidden bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
                         ⬇️ Download File
                     </a>
@@ -378,8 +382,8 @@
         </div>
     </div>
 
-    <!-- MODAL MURID -->
-    <div id="studentModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <!-- ================= MODAL MURID ================= -->
+    <div id="studentModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden transform transition-all">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                 <h3 id="studentModalTitle" class="text-lg font-bold text-slate-800">Tambah Profil Murid</h3>
@@ -417,8 +421,8 @@
         </div>
     </div>
 
-    <!-- MODAL FORUM -->
-    <div id="forumModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <!-- ================= MODAL FORUM ================= -->
+    <div id="forumModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                 <h3 class="text-lg font-bold text-slate-800">Buat Diskusi Baru</h3>
@@ -451,11 +455,18 @@
         let allModulesData = []; 
         let allStudentsData = [];
 
+        // FUNGSI PENUTUP SEMUA MODAL YANG LEBIH KUAT
         function closeAllModals() {
-            document.querySelectorAll('.modal').forEach(modal => { modal.style.display = 'none'; });
+            const modals = ['moduleModal', 'detailModal', 'studentModal', 'forumModal'];
+            modals.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
         }
 
         function switchView(viewName) {
+            closeAllModals(); // <-- Tambahan: Pastikan modal tertutup saat pindah tab
+
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
 
@@ -543,7 +554,6 @@
                                 <span class="flex items-center gap-1" title="Diunduh">⬇️ ${modul.download_count || 0}</span>
                                 <span class="flex items-center gap-1" title="Dimodifikasi">🔄 ${modul.adaptation_count || 0}</span>
                             </div>
-                            <!-- Tombol Buka diubah dari tombol Adaptasi -->
                             <button onclick="openDetailModal(${modul.id})" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-1.5 px-6 rounded-lg text-xs transition-all shadow-sm">
                                 Buka
                             </button>
@@ -568,7 +578,6 @@
             closeAllModals();
             document.getElementById('detailModal').style.display = 'flex';
 
-            // Isi Konten Modal
             document.getElementById('detailTitle').innerText = modul.title;
             document.getElementById('detailAuthor').innerHTML = `Dibuat oleh: <strong class="text-brand-blue">${modul.author_name}</strong>`;
             document.getElementById('detailDesc').innerText = modul.description || 'Tidak ada deskripsi.';
@@ -578,7 +587,6 @@
                 <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">${modul.disability_type}</span>
             `;
 
-            // Handle Tombol Download
             const btnDownload = document.getElementById('btnDownload');
             if (modul.file_url) {
                 btnDownload.href = modul.file_url;
@@ -587,11 +595,10 @@
                 btnDownload.classList.add('hidden');
             }
 
-            // Handle Tombol Adaptasi/Edit
             const btnAdapt = document.getElementById('btnAdapt');
             btnAdapt.onclick = () => {
-                closeModal('detailModal'); // Tutup detail dulu
-                openModal('adapt', modul.id); // Buka form adaptasi
+                closeModal('detailModal');
+                openModal('adapt', modul.id);
             };
         }
 
@@ -854,6 +861,7 @@
         }
 
         async function init() {
+            closeAllModals(); // <-- Tambahan: Pastikan semua tertutup saat pertama kali load
             await checkAuth();
             await fetchModules();
             await fetchStudents();
