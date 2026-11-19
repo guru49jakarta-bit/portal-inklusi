@@ -16,13 +16,7 @@
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            dark: '#0f172a', 
-                            blue: '#1e3a8a', 
-                            light: '#eff6ff',
-                            gold: '#f59e0b',
-                            goldhover: '#d97706'
-                        }
+                        brand: { dark: '#0f172a', blue: '#1e3a8a', light: '#eff6ff', gold: '#f59e0b', goldhover: '#d97706' }
                     }
                 }
             }
@@ -32,10 +26,7 @@
     
     <style>
         #mainApp { display: none; }
-        
-        /* Perbaikan CSS Modal */
         .modal { display: none; }
-        
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -49,8 +40,10 @@
         @keyframes sweep { 0% {opacity: 0; transform: translateY(-10px)} 100% {opacity: 1; transform: translateY(0)} }
         .premium-card { transition: all 0.3s ease; }
         .premium-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
-        
         input[type="file"]::file-selector-button { display: none; }
+        
+        /* Styling untuk thread balasan */
+        .reply-thread { border-left: 3px solid #e2e8f0; margin-left: 1.5rem; padding-left: 1.5rem; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans flex h-screen overflow-hidden text-slate-800">
@@ -117,165 +110,67 @@
 
             <div class="flex-1 overflow-y-auto p-8 relative">
                 
-                <!-- BERANDA -->
+                <!-- BERANDA, BANK MODUL, PANDUAN, PROFIL (Tidak Berubah, disembunyikan agar kode ringkas) -->
                 <section id="view-beranda" class="view-section active max-w-7xl mx-auto">
+                    <!-- Konten Beranda (Sama seperti sebelumnya) -->
                     <div class="bg-gradient-to-r from-brand-dark via-brand-blue to-blue-900 rounded-3xl p-10 text-white mb-10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-blue-800/50">
                         <div class="absolute right-0 top-0 w-64 h-64 bg-brand-gold rounded-full mix-blend-screen filter blur-[80px] opacity-20 pointer-events-none"></div>
                         <div class="relative z-10">
                             <h2 class="text-3xl font-extrabold mb-2 tracking-tight">Selamat datang kembali! 👋</h2>
                             <p class="text-blue-200 text-sm max-w-xl">Mari berkolaborasi mencerdaskan anak bangsa. Bagikan modul ajar adaptif Anda dan bantu sesama guru menciptakan kelas inklusif.</p>
                         </div>
-                        <button onclick="openModal('upload')" class="relative z-10 bg-gradient-to-r from-brand-gold to-yellow-500 hover:from-yellow-500 hover:to-brand-gold text-brand-dark font-bold py-3.5 px-8 rounded-xl transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] transform hover:-translate-y-0.5 whitespace-nowrap">
-                            + Unggah Modul
-                        </button>
+                        <button onclick="openModal('upload')" class="relative z-10 bg-gradient-to-r from-brand-gold to-yellow-500 hover:from-yellow-500 hover:to-brand-gold text-brand-dark font-bold py-3.5 px-8 rounded-xl transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] transform hover:-translate-y-0.5 whitespace-nowrap">+ Unggah Modul</button>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Total Modul</p><span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📚</span></div>
-                            <p class="text-4xl font-extrabold text-slate-800" id="statTotalModul">0</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Total Murid</p><span class="p-2 bg-purple-50 text-purple-600 rounded-lg text-lg">👧</span></div>
-                            <p class="text-4xl font-extrabold text-slate-800" id="statTotalMurid">0</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Diskusi Aktif</p><span class="p-2 bg-green-50 text-green-600 rounded-lg text-lg">💬</span></div>
-                            <p class="text-4xl font-extrabold text-slate-800" id="statTotalForum">0</p>
-                        </div>
-                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                            <div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Guru Kontributor</p><span class="p-2 bg-amber-50 text-amber-600 rounded-lg text-lg">🏆</span></div>
-                            <p class="text-4xl font-extrabold text-slate-800">1</p>
-                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card"><div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Total Modul</p><span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-lg">📚</span></div><p class="text-4xl font-extrabold text-slate-800" id="statTotalModul">0</p></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card"><div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Total Murid</p><span class="p-2 bg-purple-50 text-purple-600 rounded-lg text-lg">👧</span></div><p class="text-4xl font-extrabold text-slate-800" id="statTotalMurid">0</p></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card"><div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Diskusi Aktif</p><span class="p-2 bg-green-50 text-green-600 rounded-lg text-lg">💬</span></div><p class="text-4xl font-extrabold text-slate-800" id="statTotalForum">0</p></div>
+                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card"><div class="flex items-center justify-between mb-3"><p class="text-slate-500 text-sm font-semibold">Guru Kontributor</p><span class="p-2 bg-amber-50 text-amber-600 rounded-lg text-lg">🏆</span></div><p class="text-4xl font-extrabold text-slate-800">1</p></div>
                     </div>
-
-                    <div class="flex justify-between items-end mb-6">
-                        <div>
-                            <h3 class="text-2xl font-bold text-slate-800 tracking-tight">Modul Terbaru</h3>
-                            <p class="text-sm text-slate-500 mt-1">Modul ajar terbaru dari guru-guru inspiratif.</p>
-                        </div>
-                    </div>
-                    <div id="homeModulesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p>
-                    </div>
+                    <div class="flex justify-between items-end mb-6"><div><h3 class="text-2xl font-bold text-slate-800 tracking-tight">Modul Terbaru</h3><p class="text-sm text-slate-500 mt-1">Modul ajar terbaru dari guru-guru inspiratif.</p></div></div>
+                    <div id="homeModulesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"><p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p></div>
                 </section>
 
-                <!-- BANK MODUL -->
                 <section id="view-bank-modul" class="view-section max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
-                        <div>
-                            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Bank Modul Ajar</h2>
-                            <p class="text-sm text-slate-500 mt-1">Jelajahi seluruh koleksi modul adaptif.</p>
-                        </div>
-                        <button onclick="openModal('upload')" class="bg-brand-dark hover:bg-brand-blue text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md text-sm">
-                            + Unggah Modul
-                        </button>
+                        <div><h2 class="text-2xl font-bold text-slate-800 tracking-tight">Bank Modul Ajar</h2><p class="text-sm text-slate-500 mt-1">Jelajahi seluruh koleksi modul adaptif.</p></div>
+                        <button onclick="openModal('upload')" class="bg-brand-dark hover:bg-brand-blue text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md text-sm">+ Unggah Modul</button>
                     </div>
-                    <div id="allModulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p>
-                    </div>
+                    <div id="allModulesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p></div>
                 </section>
 
-                <!-- PANDUAN ADAPTASI -->
                 <section id="view-panduan" class="view-section max-w-4xl mx-auto">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2 tracking-tight">Panduan Adaptasi Pembelajaran</h2>
                     <p class="text-slate-500 mb-8 text-sm">Panduan komprehensif untuk guru reguler dalam memodifikasi modul ajar bagi PDBK.</p>
-                    
                     <div class="space-y-4">
-                        <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card" open>
-                            <summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100">
-                                <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>Prinsip Dasar Adaptasi Kurikulum</div>
-                                <span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
-                            </summary>
-                            <div class="p-6 text-slate-600 space-y-4 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl">
-                                <p>Adaptasi bukan berarti menurunkan standar, melainkan menyesuaikan cara agar murid dapat mengakses materi. Ada tiga prinsip utama:</p>
-                                <ul class="list-disc pl-5 space-y-2">
-                                    <li><strong class="text-slate-800">Modifikasi Isi (Content):</strong> Menyederhanakan materi atau memberikan materi tambahan sesuai kemampuan.</li>
-                                    <li><strong class="text-slate-800">Modifikasi Proses (Process):</strong> Mengubah cara penyampaian (visual, auditori, kinestetik) atau memberikan waktu lebih lama.</li>
-                                    <li><strong class="text-slate-800">Modifikasi Produk (Product):</strong> Mengubah cara murid menunjukkan pemahaman (misal: lisan bukan tulisan).</li>
-                                </ul>
-                            </div>
-                        </details>
-
-                        <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card">
-                            <summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100">
-                                <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">2</span>Langkah-Langkah Modifikasi Modul Ajar</div>
-                                <span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
-                            </summary>
-                            <div class="p-6 text-slate-600 space-y-4 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl">
-                                <ol class="list-decimal pl-5 space-y-3">
-                                    <li><strong class="text-slate-800">Identifikasi Hambatan:</strong> Pahami jenis ketunaan dan hambatan belajar murid.</li>
-                                    <li><strong class="text-slate-800">Tentukan Tujuan:</strong> Apakah tujuan pembelajaran yang sama bisa dicapai dengan cara berbeda?</li>
-                                    <li><strong class="text-slate-800">Pilih Alat Bantu:</strong> Gunakan media adaptif (buku audio, teks besar, gambar taktil).</li>
-                                    <li><strong class="text-slate-800">Buat Penyesuaian:</strong> Ubah format LKPD agar sesuai.</li>
-                                    <li><strong class="text-slate-800">Evaluasi:</strong> Lakukan asesmen formatif untuk melihat apakah adaptasi berhasil.</li>
-                                </ol>
-                            </div>
-                        </details>
-
-                        <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card">
-                            <summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100">
-                                <div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>Tips Spesifik Berdasarkan Jenis Ketunaan</div>
-                                <span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
-                            </summary>
-                            <div class="p-6 text-slate-600 space-y-6 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl">
-                                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                                    <h4 class="font-bold text-brand-dark mb-2">A. Tunanetra (Low Vision / Buta Total)</h4>
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        <li>Gunakan teks dengan ukuran besar dan kontras tinggi.</li>
-                                        <li>Untuk tuna netra total, gunakan media taktil (huruf timbul) atau audio (screen reader).</li>
-                                        <li>Posisikan murid di baris paling depan.</li>
-                                    </ul>
-                                </div>
-                                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                                    <h4 class="font-bold text-brand-dark mb-2">B. Tunarungu</h4>
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        <li>Pastikan wajah guru terlihat jelas saat berbicara.</li>
-                                        <li>Gunakan banyak visual, gambar, atau teks tertulis.</li>
-                                        <li>Jika ada video, pastikan ada teks (subtitles).</li>
-                                    </ul>
-                                </div>
-                                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-                                    <h4 class="font-bold text-brand-dark mb-2">C. Autisme</h4>
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        <li>Berikan instruksi yang singkat, jelas, dan literal.</li>
-                                        <li>Gunakan jadwal visual (gambar urutan kegiatan).</li>
-                                        <li>Hindari kebisingan dan cahaya yang terlalu terang.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </details>
+                        <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card" open><summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100"><div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>Prinsip Dasar Adaptasi Kurikulum</div><span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span></summary><div class="p-6 text-slate-600 space-y-4 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl"><p>Adaptasi bukan berarti menurunkan standar, melainkan menyesuaikan cara agar murid dapat mengakses materi. Ada tiga prinsip utama:</p><ul class="list-disc pl-5 space-y-2"><li><strong class="text-slate-800">Modifikasi Isi (Content):</strong> Menyederhanakan materi atau memberikan materi tambahan sesuai kemampuan.</li><li><strong class="text-slate-800">Modifikasi Proses (Process):</strong> Mengubah cara penyampaian (visual, auditori, kinestetik) atau memberikan waktu lebih lama.</li><li><strong class="text-slate-800">Modifikasi Produk (Product):</strong> Mengubah cara murid menunjukkan pemahaman (misal: lisan bukan tulisan).</li></ul></div></details>
+                        <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card"><summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100"><div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">2</span>Langkah-Langkah Modifikasi Modul Ajar</div><span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span></summary><div class="p-6 text-slate-600 space-y-4 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl"><ol class="list-decimal pl-5 space-y-3"><li><strong class="text-slate-800">Identifikasi Hambatan:</strong> Pahami jenis ketunaan dan hambatan belajar murid.</li><li><strong class="text-slate-800">Tentukan Tujuan:</strong> Apakah tujuan pembelajaran yang sama bisa dicapai dengan cara berbeda?</li><li><strong class="text-slate-800">Pilih Alat Bantu:</strong> Gunakan media adaptif (buku audio, teks besar, gambar taktil).</li><li><strong class="text-slate-800">Buat Penyesuaian:</strong> Ubah format LKPD agar sesuai.</li><li><strong class="text-slate-800">Evaluasi:</strong> Lakukan asesmen formatif untuk melihat apakah adaptasi berhasil.</li></ol></div></details>
+                        <details class="bg-white rounded-2xl shadow-sm border border-slate-200 group premium-card"><summary class="p-6 font-bold text-lg text-brand-dark flex justify-between items-center bg-white rounded-2xl group-open:rounded-b-none group-open:border-b border-slate-100"><div class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>Tips Spesifik Berdasarkan Jenis Ketunaan</div><span class="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span></summary><div class="p-6 text-slate-600 space-y-6 text-sm leading-relaxed bg-slate-50/50 rounded-b-2xl"><div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm"><h4 class="font-bold text-brand-dark mb-2">A. Tunanetra (Low Vision / Buta Total)</h4><ul class="list-disc pl-5 space-y-1"><li>Gunakan teks dengan ukuran besar dan kontras tinggi.</li><li>Untuk tuna netra total, gunakan media taktil (huruf timbul) atau audio (screen reader).</li><li>Posisikan murid di baris paling depan.</li></ul></div><div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm"><h4 class="font-bold text-brand-dark mb-2">B. Tunarungu</h4><ul class="list-disc pl-5 space-y-1"><li>Pastikan wajah guru terlihat jelas saat berbicara.</li><li>Gunakan banyak visual, gambar, atau teks tertulis.</li><li>Jika ada video, pastikan ada teks (subtitles).</li></ul></div><div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm"><h4 class="font-bold text-brand-dark mb-2">C. Autisme</h4><ul class="list-disc pl-5 space-y-1"><li>Berikan instruksi yang singkat, jelas, dan literal.</li><li>Gunakan jadwal visual (gambar urutan kegiatan).</li><li>Hindari kebisingan dan cahaya yang terlalu terang.</li></ul></div></div></details>
                     </div>
                 </section>
 
-                <!-- PROFIL MURID -->
                 <section id="view-profil" class="view-section max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
-                        <div>
-                            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Profil Murid PDBK</h2>
-                            <p class="text-sm text-slate-500 mt-1">Kelola data karakteristik dan akomodasi murid berkebutuhan khusus.</p>
-                        </div>
-                        <button onclick="openStudentModal()" class="bg-brand-dark hover:bg-brand-blue text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md text-sm">
-                            + Tambah Murid
-                        </button>
+                        <div><h2 class="text-2xl font-bold text-slate-800 tracking-tight">Profil Murid PDBK</h2><p class="text-sm text-slate-500 mt-1">Kelola data karakteristik dan akomodasi murid berkebutuhan khusus.</p></div>
+                        <button onclick="openStudentModal()" class="bg-brand-dark hover:bg-brand-blue text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md text-sm">+ Tambah Murid</button>
                     </div>
-                    <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <p class="text-slate-500 col-span-3 text-center py-8">Memuat data murid...</p>
-                    </div>
+                    <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><p class="text-slate-500 col-span-3 text-center py-8">Memuat data murid...</p></div>
                 </section>
 
-                <!-- FORUM DISKUSI -->
+                <!-- FORUM DISKUSI (INTERAKTIF) -->
                 <section id="view-forum" class="view-section max-w-4xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
                         <div>
                             <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Ruang Diskusi Aman</h2>
                             <p class="text-sm text-slate-500 mt-1">Tempat berbagi pengalaman dan bertanya tanpa rasa sungkan.</p>
                         </div>
-                        <button onclick="openForumModal()" class="bg-brand-dark hover:bg-brand-blue text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md text-sm">
+                        <button onclick="openForumModal('create')" class="bg-brand-dark hover:bg-brand-blue text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md text-sm">
                             + Buat Diskusi
                         </button>
                     </div>
-                    <div id="forumList" class="space-y-4">
+                    
+                    <!-- Container Utama Forum -->
+                    <div id="forumList" class="space-y-6">
                         <p class="text-slate-500 text-center py-8">Memuat diskusi...</p>
                     </div>
                 </section>
@@ -284,7 +179,6 @@
     </div>
 
     <!-- ================= MODAL MODUL ================= -->
-    <!-- Perhatikan: class "flex" dihapus dari tag div modal -->
     <div id="moduleModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all max-h-[90vh] flex flex-col">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0">
@@ -294,57 +188,22 @@
             <form id="moduleForm" class="p-6 overflow-y-auto">
                 <input type="hidden" id="originalId" value="">
                 <input type="hidden" id="originalAuthor" value="">
-                
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Mata Pelajaran</label>
-                        <input type="text" id="subject" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Matematika">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Target PDBK</label>
-                        <input type="text" id="disability" required placeholder="Cth: Tunanetra" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all">
-                    </div>
+                    <div><label class="block text-sm font-semibold text-slate-700 mb-2">Mata Pelajaran</label><input type="text" id="subject" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Matematika"></div>
+                    <div><label class="block text-sm font-semibold text-slate-700 mb-2">Target PDBK</label><input type="text" id="disability" required placeholder="Cth: Tunanetra" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all"></div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Judul Modul</label>
-                    <input type="text" id="title" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Pengenalan Pecahan Sederhana">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi / Cara Adaptasi</label>
-                    <textarea id="description" rows="2" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Jelaskan secara singkat modifikasi yang dilakukan..."></textarea>
-                </div>
-
-                <!-- OPSI FILE ATAU LINK -->
+                <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-2">Judul Modul</label><input type="text" id="title" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Pengenalan Pecahan Sederhana"></div>
+                <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi / Cara Adaptasi</label><textarea id="description" rows="2" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Jelaskan secara singkat modifikasi yang dilakukan..."></textarea></div>
                 <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block text-sm font-semibold text-slate-700 mb-3">Lampiran Modul (Opsional)</label>
-                    
                     <div class="flex gap-4 mb-3">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="lampiranType" value="file" checked onchange="toggleLampiran('file')" class="w-4 h-4 text-brand-blue focus:ring-brand-blue">
-                            <span class="text-sm font-medium">Upload File (PDF/Word)</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="lampiranType" value="link" onchange="toggleLampiran('link')" class="w-4 h-4 text-brand-blue focus:ring-brand-blue">
-                            <span class="text-sm font-medium">Tempel Link (G-Drive dll)</span>
-                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="lampiranType" value="file" checked onchange="toggleLampiran('file')" class="w-4 h-4 text-brand-blue focus:ring-brand-blue"><span class="text-sm font-medium">Upload File (PDF/Word)</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="lampiranType" value="link" onchange="toggleLampiran('link')" class="w-4 h-4 text-brand-blue focus:ring-brand-blue"><span class="text-sm font-medium">Tempel Link (G-Drive dll)</span></label>
                     </div>
-
-                    <!-- Input File -->
-                    <div id="inputFileContainer">
-                        <input type="file" id="moduleFile" accept=".pdf, .doc, .docx, .ppt, .pptx" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-brand-blue hover:file:bg-blue-100 transition-all border border-slate-300 rounded-xl bg-white cursor-pointer">
-                        <p class="text-[0.65rem] text-slate-400 mt-2">*Maksimal ukuran file disarankan 5MB.</p>
-                    </div>
-
-                    <!-- Input Link -->
-                    <div id="inputLinkContainer" class="hidden">
-                        <input type="url" id="moduleLink" placeholder="https://drive.google.com/..." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all bg-white">
-                    </div>
+                    <div id="inputFileContainer"><input type="file" id="moduleFile" accept=".pdf, .doc, .docx, .ppt, .pptx" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-brand-blue hover:file:bg-blue-100 transition-all border border-slate-300 rounded-xl bg-white cursor-pointer"><p class="text-[0.65rem] text-slate-400 mt-2">*Maksimal ukuran file disarankan 5MB.</p></div>
+                    <div id="inputLinkContainer" class="hidden"><input type="url" id="moduleLink" placeholder="https://drive.google.com/..." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all bg-white"></div>
                 </div>
-
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeModal('moduleModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-slate-50 transition-colors">Batal</button>
-                    <button type="submit" id="saveBtn" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Simpan Modul</button>
-                </div>
+                <div class="flex justify-end gap-3 pt-2"><button type="button" onclick="closeModal('moduleModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-slate-50 transition-colors">Batal</button><button type="submit" id="saveBtn" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Simpan Modul</button></div>
             </form>
         </div>
     </div>
@@ -352,83 +211,36 @@
     <!-- ================= MODAL DETAIL MODUL ================= -->
     <div id="detailModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all max-h-[90vh] flex flex-col">
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0">
-                <h3 id="detailTitle" class="text-xl font-bold text-slate-800 leading-tight">Judul Modul</h3>
-                <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button>
-            </div>
-            <div class="p-6 overflow-y-auto">
-                <div class="flex flex-wrap gap-2 mb-4" id="detailTags"></div>
-                <p class="text-sm text-slate-500 mb-6 italic" id="detailAuthor"></p>
-                
-                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                    <p class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-wider mb-2">Deskripsi / Cara Adaptasi</p>
-                    <p class="text-slate-700 whitespace-pre-wrap text-sm leading-relaxed" id="detailDesc"></p>
-                </div>
-            </div>
-            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex flex-col md:flex-row justify-between items-center gap-3 shrink-0">
-                <button onclick="closeModal('detailModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-white transition-colors w-full md:w-auto">Tutup</button>
-                
-                <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-                    <!-- Tombol Download -->
-                    <a id="btnDownload" href="#" target="_blank" download class="hidden bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
-                        ⬇️ Download File
-                    </a>
-                    <!-- Tombol Adaptasi -->
-                    <button id="btnAdapt" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-2.5 px-5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-                        ✏️ Edit / Adaptasi Modul
-                    </button>
-                </div>
-            </div>
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 shrink-0"><h3 id="detailTitle" class="text-xl font-bold text-slate-800 leading-tight">Judul Modul</h3><button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button></div>
+            <div class="p-6 overflow-y-auto"><div class="flex flex-wrap gap-2 mb-4" id="detailTags"></div><p class="text-sm text-slate-500 mb-6 italic" id="detailAuthor"></p><div class="bg-slate-50 p-5 rounded-xl border border-slate-200"><p class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-wider mb-2">Deskripsi / Cara Adaptasi</p><p class="text-slate-700 whitespace-pre-wrap text-sm leading-relaxed" id="detailDesc"></p></div></div>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex flex-col md:flex-row justify-between items-center gap-3 shrink-0"><button onclick="closeModal('detailModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-white transition-colors w-full md:w-auto">Tutup</button><div class="flex flex-col md:flex-row gap-3 w-full md:w-auto"><a id="btnDownload" href="#" target="_blank" download class="hidden bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">⬇️ Download File</a><button id="btnAdapt" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-2.5 px-5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">✏️ Edit / Adaptasi Modul</button></div></div>
         </div>
     </div>
 
     <!-- ================= MODAL MURID ================= -->
     <div id="studentModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden transform transition-all">
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 id="studentModalTitle" class="text-lg font-bold text-slate-800">Tambah Profil Murid</h3>
-                <button onclick="closeModal('studentModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button>
-            </div>
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50"><h3 id="studentModalTitle" class="text-lg font-bold text-slate-800">Tambah Profil Murid</h3><button onclick="closeModal('studentModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button></div>
             <form id="studentForm" class="p-6">
                 <input type="hidden" id="studentId" value="">
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Murid / Inisial</label>
-                        <input type="text" id="studentName" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Budi A.">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Kelas</label>
-                        <input type="text" id="studentClass" required placeholder="Cth: 4A" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all">
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kebutuhan Khusus (PDBK)</label>
-                    <input type="text" id="studentDisability" required placeholder="Cth: Autisme, Tunarungu" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Karakteristik Belajar</label>
-                    <textarea id="studentChar" rows="2" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Cepat bosan, butuh instruksi visual..."></textarea>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Akomodasi yang Disarankan</label>
-                    <textarea id="studentAccom" rows="2" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Waktu ujian ditambah 30 menit..."></textarea>
-                </div>
-                <div class="flex justify-end gap-3">
-                    <button type="button" onclick="closeModal('studentModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-slate-50 transition-colors">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Simpan Data</button>
-                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4"><div><label class="block text-sm font-semibold text-slate-700 mb-2">Nama Murid / Inisial</label><input type="text" id="studentName" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Budi A."></div><div><label class="block text-sm font-semibold text-slate-700 mb-2">Kelas</label><input type="text" id="studentClass" required placeholder="Cth: 4A" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all"></div></div>
+                <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kebutuhan Khusus (PDBK)</label><input type="text" id="studentDisability" required placeholder="Cth: Autisme, Tunarungu" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all"></div>
+                <div class="mb-4"><label class="block text-sm font-semibold text-slate-700 mb-2">Karakteristik Belajar</label><textarea id="studentChar" rows="2" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Cepat bosan, butuh instruksi visual..."></textarea></div>
+                <div class="mb-6"><label class="block text-sm font-semibold text-slate-700 mb-2">Akomodasi yang Disarankan</label><textarea id="studentAccom" rows="2" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Waktu ujian ditambah 30 menit..."></textarea></div>
+                <div class="flex justify-end gap-3"><button type="button" onclick="closeModal('studentModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-slate-50 transition-colors">Batal</button><button type="submit" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Simpan Data</button></div>
             </form>
         </div>
     </div>
 
-    <!-- ================= MODAL FORUM ================= -->
+    <!-- ================= MODAL FORUM (CREATE/EDIT) ================= -->
     <div id="forumModal" class="modal fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 class="text-lg font-bold text-slate-800">Buat Diskusi Baru</h3>
+                <h3 id="forumModalTitle" class="text-lg font-bold text-slate-800">Buat Diskusi Baru</h3>
                 <button onclick="closeModal('forumModal')" class="text-slate-400 hover:text-rose-500 text-2xl font-bold transition-colors">&times;</button>
             </div>
             <form id="forumForm" class="p-6">
+                <input type="hidden" id="editForumId" value="">
                 <div class="mb-4">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Topik Diskusi</label>
                     <input type="text" id="forumTitle" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all" placeholder="Cth: Tips menghadapi anak hiperaktif">
@@ -439,7 +251,7 @@
                 </div>
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="closeModal('forumModal')" class="px-5 py-2.5 border border-slate-300 rounded-xl text-slate-600 font-medium hover:bg-slate-50 transition-colors">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Kirim Diskusi</button>
+                    <button type="submit" id="forumSubmitBtn" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl font-bold shadow-md transition-colors">Kirim Diskusi</button>
                 </div>
             </form>
         </div>
@@ -454,19 +266,16 @@
         let currentUser = null;
         let allModulesData = []; 
         let allStudentsData = [];
+        let allForumPosts = [];
+        let allForumReplies = [];
 
-        // FUNGSI PENUTUP SEMUA MODAL YANG LEBIH KUAT
         function closeAllModals() {
             const modals = ['moduleModal', 'detailModal', 'studentModal', 'forumModal'];
-            modals.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = 'none';
-            });
+            modals.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
         }
 
         function switchView(viewName) {
-            closeAllModals(); // <-- Tambahan: Pastikan modal tertutup saat pindah tab
-
+            closeAllModals();
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
 
@@ -474,7 +283,6 @@
                 el.classList.remove('bg-gradient-to-r', 'from-brand-blue', 'to-blue-800', 'text-white', 'font-semibold', 'shadow-md');
                 el.classList.add('text-slate-300', 'hover:bg-white/10', 'hover:text-white', 'font-medium');
             });
-            
             const activeNav = document.getElementById('nav-' + viewName);
             activeNav.classList.remove('text-slate-300', 'hover:bg-white/10', 'hover:text-white', 'font-medium');
             activeNav.classList.add('bg-gradient-to-r', 'from-brand-blue', 'to-blue-800', 'text-white', 'font-semibold', 'shadow-md');
@@ -482,10 +290,7 @@
 
         async function checkAuth() {
             const { data: { session }, error } = await supabaseClient.auth.getSession();
-            if (error || !session) {
-                window.location.href = '/';
-                return;
-            }
+            if (error || !session) { window.location.href = '/'; return; }
             currentUser = session.user;
             document.getElementById('mainApp').style.display = 'flex';
             
@@ -495,35 +300,200 @@
         }
 
         document.getElementById('logoutBtn').addEventListener('click', async () => {
-            if (confirm('Keluar dari aplikasi?')) {
-                await supabaseClient.auth.signOut();
-                window.location.href = '/';
-            }
+            if (confirm('Keluar dari aplikasi?')) { await supabaseClient.auth.signOut(); window.location.href = '/'; }
         });
 
-        function toggleLampiran(type) {
-            if (type === 'file') {
-                document.getElementById('inputFileContainer').classList.remove('hidden');
-                document.getElementById('inputLinkContainer').classList.add('hidden');
-            } else {
-                document.getElementById('inputFileContainer').classList.add('hidden');
-                document.getElementById('inputLinkContainer').classList.remove('hidden');
+        // --- FITUR FORUM (INTERAKTIF) ---
+        async function fetchForum() {
+            document.getElementById('forumList').innerHTML = '<p class="text-slate-500 text-center py-8">Memuat diskusi...</p>';
+            
+            // Ambil data post dan balasan sekaligus
+            const [postsRes, repliesRes] = await Promise.all([
+                supabaseClient.from('forum_posts').select('*').order('created_at', { ascending: false }),
+                supabaseClient.from('forum_replies').select('*').order('created_at', { ascending: true })
+            ]);
+            
+            if (postsRes.error) {
+                document.getElementById('forumList').innerHTML = `<p class="text-red-500 text-center">Gagal memuat: ${postsRes.error.message}</p>`;
+                return;
+            }
+            
+            allForumPosts = postsRes.data;
+            allForumReplies = repliesRes.data || [];
+            
+            document.getElementById('statTotalForum').innerText = allForumPosts.length;
+            renderForum();
+        }
+
+        function renderForum() {
+            const list = document.getElementById('forumList');
+            if (allForumPosts.length === 0) {
+                list.innerHTML = `<p class="text-center text-slate-500 py-8 bg-white rounded-2xl border border-slate-100">Belum ada diskusi. Mari mulai bertanya!</p>`;
+                return;
+            }
+
+            list.innerHTML = allForumPosts.map(post => {
+                // Filter balasan khusus untuk post ini
+                const postReplies = allForumReplies.filter(r => r.post_id === post.id);
+                // Cek apakah user saat ini adalah pembuat post
+                const isOwner = post.author_id === currentUser.id;
+
+                return `
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden premium-card mb-4">
+                    <!-- Header Post -->
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-slate-800">${post.title}</h4>
+                            ${isOwner ? `
+                            <div class="flex gap-2">
+                                <button onclick="openForumModal('edit', ${post.id})" class="text-xs text-blue-600 hover:text-blue-800 font-bold bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors">Edit</button>
+                                <button onclick="deleteForumPost(${post.id})" class="text-xs text-rose-600 hover:text-rose-800 font-bold bg-rose-50 hover:bg-rose-100 px-2 py-1 rounded transition-colors">Hapus</button>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Dimulai oleh: <span class="font-bold text-brand-blue">${post.author_name}</span></p>
+                        <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">${post.content}</p>
+                        
+                        <!-- Tombol Balas -->
+                        <button onclick="toggleReplyForm(${post.id})" class="mt-4 text-sm font-bold text-brand-blue hover:text-blue-800 flex items-center gap-1">
+                            💬 Balas Diskusi (${postReplies.length})
+                        </button>
+                    </div>
+
+                    <!-- Area Balasan -->
+                    <div class="bg-slate-50/50 border-t border-slate-100 p-6">
+                        
+                        <!-- List Balasan -->
+                        ${postReplies.length > 0 ? `
+                        <div class="space-y-4 mb-4 reply-thread">
+                            ${postReplies.map(reply => `
+                                <div class="relative group">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <p class="text-xs font-bold text-slate-700">${reply.author_name}</p>
+                                        ${reply.author_id === currentUser.id ? `
+                                            <button onclick="deleteReply(${reply.id})" class="text-[0.65rem] text-rose-400 hover:text-rose-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Hapus</button>
+                                        ` : ''}
+                                    </div>
+                                    <p class="text-sm text-slate-600">${reply.content}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+
+                        <!-- Form Balasan (Tersembunyi secara default) -->
+                        <div id="replyForm-${post.id}" class="hidden mt-4 pt-4 border-t border-slate-200">
+                            <textarea id="replyInput-${post.id}" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg outline-none focus:border-brand-blue text-sm mb-2" placeholder="Tulis balasan Anda..."></textarea>
+                            <div class="flex justify-end gap-2">
+                                <button onclick="toggleReplyForm(${post.id})" class="text-xs px-3 py-1.5 border border-slate-300 rounded-lg text-slate-500 hover:bg-slate-100">Batal</button>
+                                <button onclick="submitReply(${post.id})" class="text-xs px-3 py-1.5 bg-brand-blue text-white rounded-lg font-bold hover:bg-blue-800">Kirim Balasan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function toggleReplyForm(postId) {
+            const form = document.getElementById(`replyForm-${postId}`);
+            if (form) form.classList.toggle('hidden');
+        }
+
+        async function submitReply(postId) {
+            const input = document.getElementById(`replyInput-${postId}`);
+            const content = input.value.trim();
+            if (!content) return alert('Balasan tidak boleh kosong!');
+
+            const author = currentUser.email.split('@')[0];
+            const { error } = await supabaseClient.from('forum_replies').insert([{
+                post_id: postId,
+                content: content,
+                author_name: author,
+                author_id: currentUser.id
+            }]);
+
+            if (error) alert('Gagal mengirim balasan: ' + error.message);
+            else fetchForum(); // Refresh data
+        }
+
+        async function deleteReply(replyId) {
+            if (confirm('Hapus balasan ini?')) {
+                const { error } = await supabaseClient.from('forum_replies').delete().eq('id', replyId);
+                if (error) alert('Gagal menghapus: ' + error.message);
+                else fetchForum();
             }
         }
 
-        // --- FITUR MODUL ---
+        function openForumModal(mode, postId = null) {
+            closeAllModals();
+            document.getElementById('forumModal').style.display = 'flex';
+            document.getElementById('forumForm').reset();
+            
+            if (mode === 'create') {
+                document.getElementById('forumModalTitle').innerText = 'Buat Diskusi Baru';
+                document.getElementById('forumSubmitBtn').innerText = 'Kirim Diskusi';
+                document.getElementById('editForumId').value = '';
+            } else if (mode === 'edit' && postId) {
+                document.getElementById('forumModalTitle').innerText = 'Edit Diskusi';
+                document.getElementById('forumSubmitBtn').innerText = 'Simpan Perubahan';
+                document.getElementById('editForumId').value = postId;
+                
+                const post = allForumPosts.find(p => p.id === postId);
+                if (post) {
+                    document.getElementById('forumTitle').value = post.title;
+                    document.getElementById('forumContent').value = post.content;
+                }
+            }
+        }
+
+        document.getElementById('forumForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('forumSubmitBtn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Memproses...'; btn.disabled = true;
+
+            const editId = document.getElementById('editForumId').value;
+            const title = document.getElementById('forumTitle').value;
+            const content = document.getElementById('forumContent').value;
+            const author = currentUser.email.split('@')[0];
+
+            let error;
+            if (editId) {
+                // Mode Edit
+                const res = await supabaseClient.from('forum_posts').update({ title, content }).eq('id', editId);
+                error = res.error;
+            } else {
+                // Mode Buat Baru
+                const res = await supabaseClient.from('forum_posts').insert([{ title, content, author_name: author, author_id: currentUser.id }]);
+                error = res.error;
+            }
+
+            if (error) alert('Gagal: ' + error.message);
+            else {
+                closeModal('forumModal');
+                fetchForum();
+            }
+            btn.innerText = originalText; btn.disabled = false;
+        });
+
+        async function deleteForumPost(postId) {
+            if (confirm('Apakah Anda yakin ingin menghapus diskusi ini beserta seluruh balasannya?')) {
+                const { error } = await supabaseClient.from('forum_posts').delete().eq('id', postId);
+                if (error) alert('Gagal menghapus: ' + error.message);
+                else fetchForum();
+            }
+        }
+
+        // --- FITUR MODUL (Sama seperti sebelumnya) ---
         async function fetchModules() {
             document.getElementById('homeModulesGrid').innerHTML = '<p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p>';
             document.getElementById('allModulesGrid').innerHTML = '<p class="text-slate-500 col-span-3 text-center py-8">Memuat modul...</p>';
-
             const { data: modules, error } = await supabaseClient.from('modules').select('*').order('created_at', { ascending: false });
-            
             if (error) {
                 document.getElementById('homeModulesGrid').innerHTML = `<p class="text-red-500 col-span-3 text-center">Gagal memuat: ${error.message}</p>`;
                 document.getElementById('allModulesGrid').innerHTML = `<p class="text-red-500 col-span-3 text-center">Gagal memuat: ${error.message}</p>`;
                 return;
             }
-            
             allModulesData = modules; 
             document.getElementById('statTotalModul').innerText = modules.length;
             renderModules(modules.slice(0, 3), 'homeModulesGrid');
@@ -532,336 +502,117 @@
 
         function renderModules(modules, containerId) {
             const grid = document.getElementById(containerId);
-            if (modules.length === 0) {
-                grid.innerHTML = `<p class="text-slate-500 col-span-3 text-center py-8 bg-white rounded-2xl border border-slate-100">Belum ada modul. Silakan unggah modul baru.</p>`;
-                return;
-            }
-
+            if (modules.length === 0) { grid.innerHTML = `<p class="text-slate-500 col-span-3 text-center py-8 bg-white rounded-2xl border border-slate-100">Belum ada modul. Silakan unggah modul baru.</p>`; return; }
             grid.innerHTML = modules.map(modul => `
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col premium-card group">
                     <div class="p-6 flex-1 relative">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100">${modul.subject}</span>
-                            <span class="bg-amber-50 text-amber-700 text-xs font-bold px-3 py-1 rounded-full border border-amber-100">${modul.disability_type}</span>
-                        </div>
+                        <div class="flex flex-wrap gap-2 mb-4"><span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100">${modul.subject}</span><span class="bg-amber-50 text-amber-700 text-xs font-bold px-3 py-1 rounded-full border border-amber-100">${modul.disability_type}</span></div>
                         <h4 class="font-bold text-lg text-slate-800 mb-2 leading-tight group-hover:text-brand-blue transition-colors">${modul.title}</h4>
                         <p class="text-slate-500 text-sm mb-4 line-clamp-3">${modul.description || '-'}</p>
                     </div>
                     <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex flex-col gap-3">
                         <p class="text-xs text-slate-500 font-medium">Oleh: <span class="text-brand-dark font-bold">${modul.author_name}</span></p>
                         <div class="flex justify-between items-center mt-1">
-                            <div class="flex gap-4 text-slate-400 text-xs font-medium">
-                                <span class="flex items-center gap-1" title="Diunduh">⬇️ ${modul.download_count || 0}</span>
-                                <span class="flex items-center gap-1" title="Dimodifikasi">🔄 ${modul.adaptation_count || 0}</span>
-                            </div>
-                            <button onclick="openDetailModal(${modul.id})" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-1.5 px-6 rounded-lg text-xs transition-all shadow-sm">
-                                Buka
-                            </button>
+                            <div class="flex gap-4 text-slate-400 text-xs font-medium"><span class="flex items-center gap-1" title="Diunduh">⬇️ ${modul.download_count || 0}</span><span class="flex items-center gap-1" title="Dimodifikasi">🔄 ${modul.adaptation_count || 0}</span></div>
+                            <button onclick="openDetailModal(${modul.id})" class="bg-brand-dark text-white hover:bg-brand-blue font-bold py-1.5 px-6 rounded-lg text-xs transition-all shadow-sm">Buka</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterModules() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allModulesData.filter(mod => mod.title.toLowerCase().includes(query) || mod.subject.toLowerCase().includes(query));
-            renderModules(filtered.slice(0, 3), 'homeModulesGrid');
-            renderModules(filtered, 'allModulesGrid');
-        }
+        function filterModules() { const query = document.getElementById('searchInput').value.toLowerCase(); const filtered = allModulesData.filter(mod => mod.title.toLowerCase().includes(query) || mod.subject.toLowerCase().includes(query)); renderModules(filtered.slice(0, 3), 'homeModulesGrid'); renderModules(filtered, 'allModulesGrid'); }
 
-        // --- FITUR DETAIL & ADAPTASI MODUL ---
         function openDetailModal(id) {
             const modul = allModulesData.find(m => m.id === id);
             if (!modul) return;
-
-            closeAllModals();
-            document.getElementById('detailModal').style.display = 'flex';
-
+            closeAllModals(); document.getElementById('detailModal').style.display = 'flex';
             document.getElementById('detailTitle').innerText = modul.title;
             document.getElementById('detailAuthor').innerHTML = `Dibuat oleh: <strong class="text-brand-blue">${modul.author_name}</strong>`;
             document.getElementById('detailDesc').innerText = modul.description || 'Tidak ada deskripsi.';
-            
-            document.getElementById('detailTags').innerHTML = `
-                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">${modul.subject}</span>
-                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">${modul.disability_type}</span>
-            `;
-
-            const btnDownload = document.getElementById('btnDownload');
-            if (modul.file_url) {
-                btnDownload.href = modul.file_url;
-                btnDownload.classList.remove('hidden');
-            } else {
-                btnDownload.classList.add('hidden');
-            }
-
-            const btnAdapt = document.getElementById('btnAdapt');
-            btnAdapt.onclick = () => {
-                closeModal('detailModal');
-                openModal('adapt', modul.id);
-            };
+            document.getElementById('detailTags').innerHTML = `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">${modul.subject}</span><span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">${modul.disability_type}</span>`;
+            const btnDownload = document.getElementById('btnDownload'); if (modul.file_url) { btnDownload.href = modul.file_url; btnDownload.classList.remove('hidden'); } else { btnDownload.classList.add('hidden'); }
+            const btnAdapt = document.getElementById('btnAdapt'); btnAdapt.onclick = () => { closeModal('detailModal'); openModal('adapt', modul.id); };
         }
 
+        function toggleLampiran(type) { if (type === 'file') { document.getElementById('inputFileContainer').classList.remove('hidden'); document.getElementById('inputLinkContainer').classList.add('hidden'); } else { document.getElementById('inputFileContainer').classList.add('hidden'); document.getElementById('inputLinkContainer').classList.remove('hidden'); } }
+        
         function openModal(mode, id = null) {
-            closeAllModals(); 
-            document.getElementById('moduleModal').style.display = 'flex';
-            document.getElementById('moduleForm').reset(); 
-            toggleLampiran('file'); 
-            
-            if (mode === 'upload') {
-                document.getElementById('modalTitle').innerText = 'Unggah Modul Baru';
-                document.getElementById('originalId').value = '';
-            } else if (mode === 'adapt' && id) {
+            closeAllModals(); document.getElementById('moduleModal').style.display = 'flex'; document.getElementById('moduleForm').reset(); toggleLampiran('file'); 
+            if (mode === 'upload') { document.getElementById('modalTitle').innerText = 'Unggah Modul Baru'; document.getElementById('originalId').value = ''; } 
+            else if (mode === 'adapt' && id) {
                 document.getElementById('modalTitle').innerText = 'Adaptasi Modul';
                 const original = allModulesData.find(m => m.id === id);
-                if (original) {
-                    document.getElementById('subject').value = original.subject;
-                    document.getElementById('disability').value = original.disability_type;
-                    document.getElementById('title').value = original.title + " (Adaptasi)";
-                    document.getElementById('description').value = original.description;
-                    document.getElementById('originalId').value = original.id;
-                    document.getElementById('originalAuthor').value = original.author_name;
-                }
+                if (original) { document.getElementById('subject').value = original.subject; document.getElementById('disability').value = original.disability_type; document.getElementById('title').value = original.title + " (Adaptasi)"; document.getElementById('description').value = original.description; document.getElementById('originalId').value = original.id; document.getElementById('originalAuthor').value = original.author_name; }
             }
         }
 
         document.getElementById('moduleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('saveBtn');
-            const originalText = btn.innerText;
-            btn.innerText = 'Menyimpan...'; 
-            btn.disabled = true;
-
-            const originalId = document.getElementById('originalId').value;
-            let fileUrl = null;
-
-            const lampiranType = document.querySelector('input[name="lampiranType"]:checked').value;
-
+            e.preventDefault(); const btn = document.getElementById('saveBtn'); const originalText = btn.innerText; btn.innerText = 'Menyimpan...'; btn.disabled = true;
+            const originalId = document.getElementById('originalId').value; let fileUrl = null; const lampiranType = document.querySelector('input[name="lampiranType"]:checked').value;
             try {
                 if (lampiranType === 'file') {
                     const fileInput = document.getElementById('moduleFile');
                     if (fileInput.files.length > 0) {
-                        const file = fileInput.files[0];
-                        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
-                        
-                        const { data: uploadData, error: uploadError } = await supabaseClient.storage
-                            .from('modul-files')
-                            .upload(fileName, file);
-
+                        const file = fileInput.files[0]; const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
+                        const { data: uploadData, error: uploadError } = await supabaseClient.storage.from('modul-files').upload(fileName, file);
                         if (uploadError) throw new Error('Gagal upload file: ' + uploadError.message);
-
-                        const { data: urlData } = supabaseClient.storage
-                            .from('modul-files')
-                            .getPublicUrl(fileName);
-                        
-                        fileUrl = urlData.publicUrl;
+                        const { data: urlData } = supabaseClient.storage.from('modul-files').getPublicUrl(fileName); fileUrl = urlData.publicUrl;
                     }
-                } else {
-                    const linkInput = document.getElementById('moduleLink').value;
-                    if (linkInput) fileUrl = linkInput;
-                }
-
-                const newData = {
-                    title: document.getElementById('title').value,
-                    subject: document.getElementById('subject').value,
-                    disability_type: document.getElementById('disability').value,
-                    description: document.getElementById('description').value,
-                    file_url: fileUrl,
-                    author_name: currentUser.email.split('@')[0],
-                    author_id: currentUser.id
-                };
-
-                if (originalId) {
-                    newData.description = `[Diadaptasi dari modul ${document.getElementById('originalAuthor').value}]\n\n` + newData.description;
-                }
-
+                } else { const linkInput = document.getElementById('moduleLink').value; if (linkInput) fileUrl = linkInput; }
+                const newData = { title: document.getElementById('title').value, subject: document.getElementById('subject').value, disability_type: document.getElementById('disability').value, description: document.getElementById('description').value, file_url: fileUrl, author_name: currentUser.email.split('@')[0], author_id: currentUser.id };
+                if (originalId) { newData.description = `[Diadaptasi dari modul ${document.getElementById('originalAuthor').value}]\n\n` + newData.description; }
                 const { error } = await supabaseClient.from('modules').insert([newData]);
-
                 if (error) throw new Error('Gagal menyimpan data: ' + error.message);
-
-                if (originalId) {
-                    const original = allModulesData.find(m => m.id == originalId);
-                    await supabaseClient.from('modules').update({ adaptation_count: (original.adaptation_count || 0) + 1 }).eq('id', originalId);
-                }
-                
-                closeModal('moduleModal');
-                fetchModules(); 
-
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                btn.innerText = originalText; 
-                btn.disabled = false;
-            }
+                if (originalId) { const original = allModulesData.find(m => m.id == originalId); await supabaseClient.from('modules').update({ adaptation_count: (original.adaptation_count || 0) + 1 }).eq('id', originalId); }
+                closeModal('moduleModal'); fetchModules(); 
+            } catch (error) { alert(error.message); } finally { btn.innerText = originalText; btn.disabled = false; }
         });
 
         // --- FITUR PROFIL MURID ---
         async function fetchStudents() {
             document.getElementById('studentsGrid').innerHTML = '<p class="text-slate-500 col-span-3 text-center py-8">Memuat data murid...</p>';
             const { data, error } = await supabaseClient.from('students').select('*').order('created_at', { ascending: false });
-            
-            if (error) {
-                document.getElementById('studentsGrid').innerHTML = `<p class="text-red-500 col-span-3 text-center">Gagal memuat data murid: ${error.message}</p>`;
-                return;
-            }
-            allStudentsData = data;
-            document.getElementById('statTotalMurid').innerText = data.length;
-            renderStudents();
+            if (error) { document.getElementById('studentsGrid').innerHTML = `<p class="text-red-500 col-span-3 text-center">Gagal memuat data murid: ${error.message}</p>`; return; }
+            allStudentsData = data; document.getElementById('statTotalMurid').innerText = data.length; renderStudents();
         }
 
         function renderStudents() {
             const grid = document.getElementById('studentsGrid');
-            if (allStudentsData.length === 0) {
-                grid.innerHTML = `<p class="text-slate-500 col-span-3 text-center py-8 bg-white rounded-2xl border border-slate-100">Belum ada data murid. Silakan tambah data.</p>`;
-                return;
-            }
-
+            if (allStudentsData.length === 0) { grid.innerHTML = `<p class="text-slate-500 col-span-3 text-center py-8 bg-white rounded-2xl border border-slate-100">Belum ada data murid. Silakan tambah data.</p>`; return; }
             grid.innerHTML = allStudentsData.map(student => `
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col premium-card">
                     <div class="p-6 flex-1">
-                        <div class="flex justify-between items-start mb-3">
-                            <h4 class="font-bold text-lg text-slate-800 leading-tight">${student.name}</h4>
-                            <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200">Kelas ${student.class_level}</span>
-                        </div>
+                        <div class="flex justify-between items-start mb-3"><h4 class="font-bold text-lg text-slate-800 leading-tight">${student.name}</h4><span class="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200">Kelas ${student.class_level}</span></div>
                         <span class="inline-block bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 rounded-full mb-4 border border-purple-100">${student.disability_type}</span>
-                        
-                        <div class="mb-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <p class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-wider mb-1">Karakteristik</p>
-                            <p class="text-sm text-slate-700">${student.characteristics || '-'}</p>
-                        </div>
-                        <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100/50">
-                            <p class="text-[0.65rem] font-bold text-blue-400 uppercase tracking-wider mb-1">Akomodasi</p>
-                            <p class="text-sm text-slate-700">${student.accommodations || '-'}</p>
-                        </div>
+                        <div class="mb-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><p class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-wider mb-1">Karakteristik</p><p class="text-sm text-slate-700">${student.characteristics || '-'}</p></div>
+                        <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100/50"><p class="text-[0.65rem] font-bold text-blue-400 uppercase tracking-wider mb-1">Akomodasi</p><p class="text-sm text-slate-700">${student.accommodations || '-'}</p></div>
                     </div>
                     ${student.author_id === currentUser.id ? `
-                    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
-                        <button onclick="editStudent(${student.id})" class="text-brand-blue hover:text-blue-800 text-sm font-bold transition-colors">Edit</button>
-                        <button onclick="deleteStudent(${student.id})" class="text-rose-500 hover:text-rose-700 text-sm font-bold transition-colors">Hapus</button>
-                    </div>
+                    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3"><button onclick="editStudent(${student.id})" class="text-brand-blue hover:text-blue-800 text-sm font-bold transition-colors">Edit</button><button onclick="deleteStudent(${student.id})" class="text-rose-500 hover:text-rose-700 text-sm font-bold transition-colors">Hapus</button></div>
                     ` : `<div class="px-6 py-4 bg-slate-50 border-t border-slate-100 text-xs text-slate-400 italic">Dibuat oleh: ${student.author_name || 'Guru Lain'}</div>`}
                 </div>
             `).join('');
         }
 
-        function openStudentModal() {
-            closeAllModals();
-            document.getElementById('studentModal').style.display = 'flex';
-            document.getElementById('studentForm').reset();
-            document.getElementById('studentId').value = '';
-            document.getElementById('studentModalTitle').innerText = 'Tambah Profil Murid';
-        }
-
-        function editStudent(id) {
-            const student = allStudentsData.find(s => s.id === id);
-            if (!student) return;
-
-            closeAllModals();
-            document.getElementById('studentModal').style.display = 'flex';
-            document.getElementById('studentModalTitle').innerText = 'Edit Profil Murid';
-            
-            document.getElementById('studentId').value = student.id;
-            document.getElementById('studentName').value = student.name;
-            document.getElementById('studentClass').value = student.class_level;
-            document.getElementById('studentDisability').value = student.disability_type;
-            document.getElementById('studentChar').value = student.characteristics || '';
-            document.getElementById('studentAccom').value = student.accommodations || '';
-        }
-
-        async function deleteStudent(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus data murid ini?')) {
-                const { error } = await supabaseClient.from('students').delete().eq('id', id);
-                if (error) alert('Gagal menghapus: ' + error.message);
-                else fetchStudents();
-            }
-        }
+        function openStudentModal() { closeAllModals(); document.getElementById('studentModal').style.display = 'flex'; document.getElementById('studentForm').reset(); document.getElementById('studentId').value = ''; document.getElementById('studentModalTitle').innerText = 'Tambah Profil Murid'; }
+        function editStudent(id) { const student = allStudentsData.find(s => s.id === id); if (!student) return; closeAllModals(); document.getElementById('studentModal').style.display = 'flex'; document.getElementById('studentModalTitle').innerText = 'Edit Profil Murid'; document.getElementById('studentId').value = student.id; document.getElementById('studentName').value = student.name; document.getElementById('studentClass').value = student.class_level; document.getElementById('studentDisability').value = student.disability_type; document.getElementById('studentChar').value = student.characteristics || ''; document.getElementById('studentAccom').value = student.accommodations || ''; }
+        async function deleteStudent(id) { if (confirm('Apakah Anda yakin ingin menghapus data murid ini?')) { const { error } = await supabaseClient.from('students').delete().eq('id', id); if (error) alert('Gagal menghapus: ' + error.message); else fetchStudents(); } }
 
         document.getElementById('studentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerText = 'Menyimpan...'; btn.disabled = true;
-
+            e.preventDefault(); const btn = e.target.querySelector('button[type="submit"]'); btn.innerText = 'Menyimpan...'; btn.disabled = true;
             const id = document.getElementById('studentId').value;
-            const data = {
-                name: document.getElementById('studentName').value,
-                class_level: document.getElementById('studentClass').value,
-                disability_type: document.getElementById('studentDisability').value,
-                characteristics: document.getElementById('studentChar').value,
-                accommodations: document.getElementById('studentAccom').value,
-                author_id: currentUser.id,
-                author_name: currentUser.email.split('@')[0]
-            };
-
+            const data = { name: document.getElementById('studentName').value, class_level: document.getElementById('studentClass').value, disability_type: document.getElementById('studentDisability').value, characteristics: document.getElementById('studentChar').value, accommodations: document.getElementById('studentAccom').value, author_id: currentUser.id, author_name: currentUser.email.split('@')[0] };
             let error;
-            if (id) {
-                const res = await supabaseClient.from('students').update(data).eq('id', id);
-                error = res.error;
-            } else {
-                const res = await supabaseClient.from('students').insert([data]);
-                error = res.error;
-            }
-
-            if (error) {
-                alert('Gagal menyimpan data: ' + error.message);
-            } else {
-                closeModal('studentModal');
-                fetchStudents();
-            }
+            if (id) { const res = await supabaseClient.from('students').update(data).eq('id', id); error = res.error; } else { const res = await supabaseClient.from('students').insert([data]); error = res.error; }
+            if (error) { alert('Gagal menyimpan data: ' + error.message); } else { closeModal('studentModal'); fetchStudents(); }
             btn.innerText = 'Simpan Data'; btn.disabled = false;
         });
 
-        // --- FITUR FORUM ---
-        async function fetchForum() {
-            document.getElementById('forumList').innerHTML = '<p class="text-slate-500 text-center py-8">Memuat diskusi...</p>';
-            const { data, error } = await supabaseClient.from('forum_posts').select('*').order('created_at', { ascending: false });
-            
-            if (error) {
-                document.getElementById('forumList').innerHTML = `<p class="text-red-500 text-center">Gagal memuat: ${error.message}</p>`;
-                return;
-            }
-            
-            document.getElementById('statTotalForum').innerText = data.length;
-
-            const list = document.getElementById('forumList');
-            if (data.length === 0) {
-                list.innerHTML = `<p class="text-center text-slate-500 py-8 bg-white rounded-2xl border border-slate-100">Belum ada diskusi. Mari mulai bertanya!</p>`;
-                return;
-            }
-            list.innerHTML = data.map(post => `
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 premium-card">
-                    <h4 class="font-bold text-lg text-slate-800 mb-2">${post.title}</h4>
-                    <p class="text-xs text-slate-400 mb-3">Dimulai oleh: <span class="font-bold text-brand-blue">${post.author_name}</span></p>
-                    <p class="text-slate-600 text-sm leading-relaxed">${post.content}</p>
-                </div>
-            `).join('');
-        }
-
-        function openForumModal() {
-            closeAllModals();
-            document.getElementById('forumModal').style.display = 'flex';
-            document.getElementById('forumForm').reset();
-        }
-
-        document.getElementById('forumForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('forumTitle').value;
-            const content = document.getElementById('forumContent').value;
-            const author = currentUser.email.split('@')[0];
-
-            const { error } = await supabaseClient.from('forum_posts').insert([{ title, content, author_name: author }]);
-            if (error) alert('Gagal: ' + error.message);
-            else {
-                closeModal('forumModal');
-                fetchForum();
-            }
-        });
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
 
         async function init() {
-            closeAllModals(); // <-- Tambahan: Pastikan semua tertutup saat pertama kali load
+            closeAllModals();
             await checkAuth();
             await fetchModules();
             await fetchStudents();
